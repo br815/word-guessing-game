@@ -224,7 +224,7 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 </details>
 
 ## POS Tags
-| Tag | Meaning | Example | Allowed Here? | Corresponding WordNet Tag |
+| Tag | Meaning | Example | Allowed in Game? | Corresponding WordNet Tag |
 | :-------: | :------: | :-------: | :-------: | :-------: |
 | CC | coordinating conjunction | but | ❌ |
 | CD | cardinal number | two | ❌ |
