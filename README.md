@@ -226,42 +226,42 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 ## POS Tags
 | Tag | Meaning | Example | Allowed in Game? | Corresponding WordNet Tag |
 | :-------: | :------: | :-------: | :-------: | :-------: |
-| CC | coordinating conjunction | but | ❌ |
-| CD | cardinal number | two | ❌ |
-| DT | determiner | the | ❌ |
-| EX | existential | there | ❌ |
-| FW | foreign word | ciao | ❌ |
-| IN | preposition | on | ❌ |
-| JJ | adjective | big | ✅ | wordnet.ADJ |
-| JJR | comparative adjective | bigger | ✅ | wordnet.ADJ |
-| JJS | superlative adjective | biggest | ✅ | wordnet.ADJ |
-| LS | list marker | A. | ❌ |
-| MD | modal | may | ❌ |
-| NN | noun | car | ✅ | wordnet.NOUN |
-| NNS | plural noun | cars | ✅ | wordnet.NOUN |
-| NNP | proper noun | Mary | ❌ |
-| NNPS | plural proper noun | Marys | ❌ |
-| PDT | predeterminer | _both_ Marys | ❌ |
-| POS | possessive | Mary’s | ❌ |
-| PRP | personal pronoun | she | ❌ |
-| PRP$ | possessive pronoun | hers | ❌ |
-| RB | adverb | badly | ❌ |
-| RBR | comparative adverb | worse | ✅ | wordnet.ADV |
-| RBS | superlative adverb | worst | ✅ | wordnet.ADV |
-| RP | particle | give _up_ | ❌ |
-| SYM | symbol | $ | ❌ |
-| TO | infinitive to | _to_ be | ❌ |
-| UH | interjection | ugh | ❌ |
-| VB | lexical verb | run | ✅ | wordnet.VERB |
-| VBD | past tense verb | ran | ✅ | wordnet.VERB |
-| VBG | gerund or present participle | running | ✅ | wordnet.VERB |
-| VBN | past particple | ran | ✅ | wordnet.VERB |
-| VBP | singular present, not 3rd person | run | ✅ | wordnet.VERB |
-| VBZ | singular present, 3rd person | runs | ✅ | wordnet.VERB |
-| WDT | wh-determiner | which | ❌ |
-| WP | wh-pronoun | who | ❌ |
-| WP$ | possessive wh-pronoun | whose | ❌ |
-| WRB | wh-adverb | when | ❌ |
+| CC | coordinating conjunction | but | &cross; |
+| CD | cardinal number | two | &cross; |
+| DT | determiner | the | &cross; |
+| EX | existential | there | &cross; |
+| FW | foreign word | ciao | &cross; |
+| IN | preposition | on | &cross; |
+| JJ | adjective | big | &check; | wordnet.ADJ |
+| JJR | comparative adjective | bigger | &check; | wordnet.ADJ |
+| JJS | superlative adjective | biggest | &check; | wordnet.ADJ |
+| LS | list marker | A. | &cross; |
+| MD | modal | may | &cross; |
+| NN | noun | car | &check; | wordnet.NOUN |
+| NNS | plural noun | cars | &check; | wordnet.NOUN |
+| NNP | proper noun | Mary | &cross; |
+| NNPS | plural proper noun | Marys | &cross; |
+| PDT | predeterminer | _both_ Marys | &cross; |
+| POS | possessive | Mary’s | &cross; |
+| PRP | personal pronoun | she | &cross; |
+| PRP$ | possessive pronoun | hers | &cross; |
+| RB | adverb | badly | &cross; |
+| RBR | comparative adverb | worse | &check; | wordnet.ADV |
+| RBS | superlative adverb | worst | &check; | wordnet.ADV |
+| RP | particle | give _up_ | &cross; |
+| SYM | symbol | $ | &cross; |
+| TO | infinitive to | _to_ be | &cross; |
+| UH | interjection | ugh | &cross; |
+| VB | lexical verb | run | &check; | wordnet.VERB |
+| VBD | past tense verb | ran | &check; | wordnet.VERB |
+| VBG | gerund or present participle | running | &check; | wordnet.VERB |
+| VBN | past particple | ran | &check; | wordnet.VERB |
+| VBP | singular present, not 3rd person | run | &check; | wordnet.VERB |
+| VBZ | singular present, 3rd person | runs | &check; | wordnet.VERB |
+| WDT | wh-determiner | which | &cross; |
+| WP | wh-pronoun | who | &cross; |
+| WP$ | possessive wh-pronoun | whose | &cross; |
+| WRB | wh-adverb | when | &cross; |
 
 ## Run Word Guessing Game (NEEDS EDITING)
 Open terminal in `word-guessing-game` and run:
