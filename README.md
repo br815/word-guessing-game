@@ -264,7 +264,7 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 | WRB | wh-adverb | when | ❌ |
 
 ## Run Word Guessing Game (NEEDS EDITING)
-Open terminal in `Word_Guessing_Game` and run:
+Open terminal in `word-guessing-game` and run:
 <!-- CODE START -->
 ```
 cd src
