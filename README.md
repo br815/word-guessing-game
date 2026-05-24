@@ -64,7 +64,7 @@ To install the latest version of Python (Python 3) on Windows 11 or less, follow
 4. After installing Python and adding it to `Path`, make sure to restart your IDE to avoid compilation errors.
 
 ## Install NLTK
-The Python library `NLTK` is necessary to run this project.
+The Python library `NLTK` is necessary to run the NLP portion of this project.
 
 To install `NLTK`, open the terminal and run:
 
@@ -156,7 +156,7 @@ To view your downloaded `NLTK` data in File Explorer, note the Download director
   <!-- CODE END -->
 
 ## Install Requests & Beautiful Soup
-The Python libraries `Requests` and `Beautiful Soup` are necessary to run this project.
+The Python libraries `Requests` and `Beautiful Soup` are necessary to run the web crawler portion of this project.
 
 To install `Requests`, open the terminal and run:
 <!-- CODE START -->
