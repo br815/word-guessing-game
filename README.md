@@ -140,7 +140,7 @@ To download `NLTK` data, follow these instructions:
   showing info https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/index.xml
   ```
   <!-- CODE END -->
-3. This output should simultaneously opens a new window for the `NLTK Downloader`. Here, you can select which data to download. If disk space is not a concern, you can download all of the data. However, this project only requires the data in `book` ("Everything used in the `NLTK Book`"). (You can re-open the `NLTK Downloader` at any time by repeating the steps in this section.)
+3. This output should simultaneously open a new window for the `NLTK Downloader`. Here, you can select which data to download. If disk space is not a concern, you can download all of the data. However, this project only requires the data in `book` ("Everything used in the `NLTK Book`"). You can re-open the `NLTK Downloader` at any time by repeating the steps in this section.
 
 To view your downloaded `NLTK` data in File Explorer, note the Download directory specified in the `NLTK Downloader`. It should look similar to:
   <!-- CODE START -->
