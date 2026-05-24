@@ -110,7 +110,7 @@ Successfully installed click-8.3.3 colorama-0.4.6 joblib-1.5.3 nltk-3.9.4 regex-
 <!-- DROPDOWN CODE END -->
 </details>
 
-## Download NLTK Data
+### Download NLTK Data
 After installing `NLTK`, you will need to download some or all of its data.
 
 To download `NLTK` data, follow these instructions:
