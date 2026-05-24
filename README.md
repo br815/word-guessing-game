@@ -67,13 +67,16 @@ To install the latest version of Python (Python 3) on Windows 11 or less, follow
 The Python library `NLTK` is necessary to run this project.
 
 To install `NLTK`, open the terminal and run:
+
 <!-- CODE START -->
 ```
 pip install nltk
 ```
 <!-- CODE END -->
-You should see output similar to:
-<!-- CODE START -->
+
+<details><summary>You should see output similar to:</summary>
+
+<!-- DROPDOWN CODE START -->
 ```
 Collecting nltk
   Downloading nltk-3.9.4-py3-none-any.whl.metadata (3.2 kB)
@@ -104,7 +107,8 @@ Successfully installed click-8.3.3 colorama-0.4.6 joblib-1.5.3 nltk-3.9.4 regex-
 [notice] A new release of pip is available: 26.0.1 -> 26.1
 [notice] To update, run: C:\Users\Owner\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pip install --upgrade pip
 ```
-<!-- CODE END -->
+<!-- DROPDOWN CODE END -->
+</details>
 
 ## Download NLTK Data
 After installing `NLTK`, you will need to download some or all of its data.
@@ -167,8 +171,9 @@ pip install bs4
 ```
 <!-- CODE END -->
 
-You should see output similar to:
-<!-- CODE START -->
+<details><summary>You should see output similar to:</summary>
+
+<!-- DROPDOWN CODE START -->
 ```
 Collecting requests
   Downloading requests-2.33.1-py3-none-any.whl.metadata (4.8 kB)
@@ -215,24 +220,25 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 [notice] A new release of pip is available: 26.0.1 -> 26.1
 [notice] To update, run: C:\Users\Owner\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pip install --upgrade pip
 ```
-<!-- CODE END -->
+<!-- DROPDOWN CODE END -->
+</details>
 
 ## POS Tags
-| Tag | Meaning | Example | Allowed? |
-| :-------: | :------: | :-------: | :-------: |
+| Tag | Meaning | Example | Allowed Here? | Corresponding WordNet Tag |
+| :-------: | :------: | :-------: | :-------: | :-------: |
 | CC | coordinating conjunction | but | ❌ |
 | CD | cardinal number | two | ❌ |
 | DT | determiner | the | ❌ |
 | EX | existential | there | ❌ |
 | FW | foreign word | ciao | ❌ |
 | IN | preposition | on | ❌ |
-| JJ | adjective | big | ✅ |
-| JJR | comparative adjective | bigger | ✅ |
-| JJS | superlative adjective | biggest | ✅ |
+| JJ | adjective | big | ✅ | wordnet.ADJ |
+| JJR | comparative adjective | bigger | ✅ | wordnet.ADJ |
+| JJS | superlative adjective | biggest | ✅ | wordnet.ADJ |
 | LS | list marker | A. | ❌ |
 | MD | modal | may | ❌ |
-| NN | noun | car | ✅ |
-| NNS | plural noun | cars | ✅ |
+| NN | noun | car | ✅ | wordnet.NOUN |
+| NNS | plural noun | cars | ✅ | wordnet.NOUN |
 | NNP | proper noun | Mary | ❌ |
 | NNPS | plural proper noun | Marys | ❌ |
 | PDT | predeterminer | _both_ Marys | ❌ |
@@ -240,28 +246,34 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 | PRP | personal pronoun | she | ❌ |
 | PRP$ | possessive pronoun | hers | ❌ |
 | RB | adverb | badly | ❌ |
-| RBR | comparative adverb | worse | ✅ |
-| RBS | superlative adverb | worst | ✅ |
+| RBR | comparative adverb | worse | ✅ | wordnet.ADV |
+| RBS | superlative adverb | worst | ✅ | wordnet.ADV |
 | RP | particle | give _up_ | ❌ |
 | SYM | symbol | $ | ❌ |
 | TO | infinitive to | _to_ be | ❌ |
 | UH | interjection | ugh | ❌ |
-| VB | lexical verb | run | ✅ |
-| VBD | past tense verb | ran | ✅ |
-| VBG | gerund or present participle | running | ✅ |
-| VBN | past particple | ran | ✅ |
-| VBP | singular present, not 3rd person | run | ✅ |
-| VBZ | singular present, 3rd person | runs | ✅ |
+| VB | lexical verb | run | ✅ | wordnet.VERB |
+| VBD | past tense verb | ran | ✅ | wordnet.VERB |
+| VBG | gerund or present participle | running | ✅ | wordnet.VERB |
+| VBN | past particple | ran | ✅ | wordnet.VERB |
+| VBP | singular present, not 3rd person | run | ✅ | wordnet.VERB |
+| VBZ | singular present, 3rd person | runs | ✅ | wordnet.VERB |
 | WDT | wh-determiner | which | ❌ |
 | WP | wh-pronoun | who | ❌ |
 | WP$ | possessive wh-pronoun | whose | ❌ |
 | WRB | wh-adverb | when | ❌ |
 
 ## Run Word Guessing Game (NEEDS EDITING)
-Open terminal in `WordGuessingGame` and run:
+Open terminal in `Word_Guessing_Game` and run:
 <!-- CODE START -->
 ```
 cd src
 python main.py
 ```
 <!-- CODE END -->
+
+## TODO
+* Web crawler?
+* Multiple different rulesets for game?
+* Test cases?
+* GUI? / option to quit at any time?

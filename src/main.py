@@ -36,7 +36,7 @@ if __name__ == "__main__":
             # Valid word list generated.
             break
         # End of user input validation loop
-    # Try-except block is necessary in the event that the provided directory does not exist.
+    # Try-except block is necessary in the event that the provided directory does not exist (see process_file.py).
     except FileNotFoundError as err_msg:
         print(err_msg)
         exit()
@@ -46,9 +46,9 @@ if __name__ == "__main__":
         print(word_list)
 
     if MAIN_DEBUGGER:
-        # Call word_guessing_game() on the global test list
+        # Call word_guessing_game() on the global test list.
         word_guessing_game(TEST_LIST)
     else:
-        # Call word_guessing_game() on the processed word list
+        # Call word_guessing_game() on the processed word list.
         word_guessing_game(word_list)
 # End of main()

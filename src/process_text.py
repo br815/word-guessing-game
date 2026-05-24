@@ -1,14 +1,14 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
-from unicodedata import normalize, combining
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
+from unicodedata import normalize, combining
 from nltk import pos_tag
 from collections import Counter
 
 # GLOBALS:
 # Const for minimum length of a word (eg. 5 letters), for filtration.
-MIN_TOK_LEN = 5
+MIN_TOK_LEN = 3
 # Const for minimum frequency of a word occurring (eg. twice), for filtration.
 MIN_FREQ_VAL = 2
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.
@@ -52,6 +52,7 @@ POS_DICT = {
 
 ''' Helper Function 1:		remove_accents()
 	Descr:			        This function replaces any accented characters in a text with unaccented characters.
+                            It is called by process_text().
 	Param:			        input_str
                             String for a text that may contain accented characters.
 	Return:			        unaccented_str
@@ -74,6 +75,7 @@ def remove_accents(input_str):
 
 ''' Helper Function 2:		is_valid_token()
 	Descr:			        This function checks if a token passes a series of conditions.
+                            It is called by process_text().
 	Param:			        tok
                             String for a token.
 	Return:			        True OR False
@@ -104,8 +106,20 @@ def is_valid_token(tok):
 ''' Function 3:		        process_text()
 	Descr:			        This function tokenizes, lemmatizes, and counts lemma frequencies of a given text.
                             It then returns a word list of frequent lemmas in the text.
+                            The fundamental processing happening in this function is:
+                            [unaccented token 
+                            for token 
+                            in tokenized(raw_text) 
+                            if token != stopword AND token != contraction 
+                            AND POS(token) in POS_DICT 
+                            AND len(lemmatized(token)) > MIN_TOK_LEN].
+                            Because accurate lemmatization requires POS tagging, and POS tagging is expensive on an entire text, 
+                            token filtration using is_valid_token() is done first.
+                            Token length > MIN_TOK_LEN is checked twice. 
+                            First, during token filtration, it helps to reduce the size/cost of POS tagging & lemmatization later.
+                            Then, after lemmatization, it is necessary to validate that the shortened words themselves are at least the min length.
 	Param:			        raw_text
-                            A string for unprocessed text.
+                            A string of unprocessed text.
 	Return:			        frequent_lemmas
 					        A list of the lemmas that occur frequently and meet all desired conditions. '''
 def process_text(raw_text):
@@ -155,12 +169,19 @@ def process_text(raw_text):
         for word, pos 
         in filtered_pos]
 
-    if PT_DEBUGGER:
-        print("***ALL LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %all_lemmas)
+    # 6th: List comprehension used to validate that the final lemmatized words are at least the min length.
+    filtered_lemmas = [
+        lemma 
+        for lemma 
+        in all_lemmas 
+        if len(lemma) >= MIN_TOK_LEN]
 
-    # 6th: Count frequencies of each lemma.
-    # List comprehension used to filter lemmas only by those appearing "frequently".
-    lemma_counts = Counter(all_lemmas)
+    if PT_DEBUGGER:
+        print("***FILTERED LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_lemmas)
+
+    # 7th: Count frequencies of each lemma.
+    # List comprehension used to further filter lemmas only by those appearing "frequently".
+    lemma_counts = Counter(filtered_lemmas)
     frequent_lemmas = [
         lemma 
         for lemma, count 

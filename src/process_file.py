@@ -8,6 +8,7 @@ PF_DEBUGGER = False
 
 ''' Helper Function 1:		select_file_from_dir()
 	Descr:			        This function lists the files in a given directory and prompts the user to select one.
+                            It is called by process_file().
 	Param:			        dir_name
                             Relative path to a directory in the repo.
 	Return:			        selected_file
@@ -64,13 +65,14 @@ def select_file_from_dir(dir_name):
 
 
 
-''' Helper Function 2:		read_selected_file()
+''' Helper Function 2:		read_from_selected_file()
 	Descr:			        This function opens a given input file, reads it, and returns its contents.
+                            It is called by process_file().
 	Param:			        input_file
                             Relative path to an input file.
 	Return:			        input_file_text
 					        String for the contents of the input file. '''
-def read_selected_file(input_file):
+def read_from_selected_file(input_file):
     # Read selected file.
     with open(input_file, "r", encoding="utf-8") as f:
         input_file_text = f.read()
@@ -81,7 +83,7 @@ def read_selected_file(input_file):
         return None
     
     return input_file_text
-# End of read_selected_file()
+# End of read_from_selected_file()
 
 
 
@@ -98,7 +100,7 @@ def process_file(dir_name):
 
     selected_file = select_file_from_dir(dir_name)
 
-    raw_text = read_selected_file(selected_file)
+    raw_text = read_from_selected_file(selected_file)
 
     if PF_DEBUGGER:
         print("***RAW_TEXT FROM PROCESS_FILE() IS:***\n\"%s\"" %raw_text)
