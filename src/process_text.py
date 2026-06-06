@@ -8,7 +8,7 @@ from collections import Counter
 
 # GLOBALS:
 # Const for minimum length of a word (eg. 5 letters), for filtration.
-MIN_TOK_LEN = 3
+MIN_TOK_LEN = 5
 # Const for minimum frequency of a word occurring (eg. twice), for filtration.
 MIN_FREQ_VAL = 2
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.

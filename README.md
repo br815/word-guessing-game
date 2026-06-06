@@ -3,17 +3,26 @@
 This repository is for a word guessing game.
 
 ## Highlights (NEEDS EDITING)
-* keyword extraction
-* topic modeling
-* corpus analysis
-Order:
-1. tokenize
-2. normalize/filter
-3. POS tag
-4. remove undesired POS
-5. lemmatize using POS
-6. frequency count
-7. frequency filter
+NLP overview:
+1. keyword extraction
+2. topic modeling
+3. corpus analysis
+
+Text processing:
+1. tokenization
+2. normalization/filtration
+3. POS tagging
+4. removing undesired POS
+5. lemmatizing using POS
+6. frequency counting
+7. frequency filtration
+
+Game systems:
+1. word selection
+2. user input validation
+3. scoring system
+4. display updating
+
 
 ## Install Python (and Pip)
 Python is necessary to run this project.
@@ -272,8 +281,13 @@ python main.py
 ```
 <!-- CODE END -->
 
-## TODO
+## TODO FEATURES
 * Web crawler?
 * Multiple different rulesets for game?
 * Test cases?
 * GUI? / option to quit at any time?
+
+## TODO STYLE CHANGES
+- move all globals to a config.py? (https://docs.python.org/3/faq/programming.html#how-do-i-share-global-variables-across-modules)
+- change function documentation to docstrings?
+- replace all print stmts' f-strings with C-style strings, or vice-versa?
