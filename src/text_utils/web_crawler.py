@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 
 
-# GLOBALS
+# GLOBALS (move to config.py?)
 TEXTS_DIR = Path("texts")
 MAX_LINKS_PER_PAGE = 10
 

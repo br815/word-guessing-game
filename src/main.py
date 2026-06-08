@@ -1,17 +1,22 @@
 from pathlib import Path
-from process_file import process_file
-from process_text import process_text
-from game import word_guessing_game
-from game import QUIT_CHAR
+from text_utils.process_file import process_file
+from text_utils.process_text import process_text
+from game.word_guessing_game import WordGuessingGame
+from game.rulesets import (
+    PointsRuleSet,
+    LivesRuleSet,
+    CountdownRuleSet
+)
+from game.statistics import Statistics
+import config
 
 # GLOBALS:
 # Path to this repo's root.
 REPO_ROOT = Path(__file__).resolve().parent.parent
-# Boolean for main.py (MAIN) to print debug print statements if desired.
-MAIN_DEBUGGER = True
 # Test wordlist to easily run word_guessing_game() on.
 TEST_LIST = ["callous", "germane"]
-
+# ...
+SESSION_STATS = Statistics()
 
 
 
@@ -43,42 +48,52 @@ if __name__ == "__main__":
         print(err_msg)
         exit()
 
-    if MAIN_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.MAIN_DEBUGGER:
         print("***LIST OF VALID WORDS FROM MAIN():***")
         print(word_list)
 
-    cumulative_score = 0
-    cumulative_games = 0
+    # Before starting the game loop, user selects a game mode based on ruleset.
+    print("\nSelect a game mode:")
+    print("1. Points Mode")
+    print("2. Lives Mode")
+    print("3. Countdown Mode")
+    game_mode = input("Selection: ")
+    if game_mode == "2":
+        ruleset = LivesRuleSet()
+    elif game_mode == "3":
+        ruleset = CountdownRuleSet()
+    else:
+        ruleset = PointsRuleSet()
+
     # Loop word_guessing_game so long as the user wants to keep playing.
     while True:
         try:
-            if MAIN_DEBUGGER:
-                # Call word_guessing_game() on the global test list.
+            if config.PROJECT_DEBUGGER or config.MAIN_DEBUGGER:
+                # Instantiate a WordGuessingGame object using the global test list.
                 print("***TEST LIST FROM MAIN():***")
                 print(TEST_LIST)
-                game_score = word_guessing_game(TEST_LIST)
+                game = WordGuessingGame(TEST_LIST, ruleset)
             else:
-                # Call word_guessing_game() on the processed word list.
-                game_score = word_guessing_game(word_list)
+                # Instantiate a WordGuessingGame object using the processed word list.
+                game = WordGuessingGame(word_list, ruleset)
             
-            # Update cumulative trackers.
-            cumulative_score += game_score
-            cumulative_games += 1
-            
+            # Call the actual game function and store its results.
+            game_results = game.play()
+            # Update stats tracker.
+            SESSION_STATS.record_game(game_results)
+
             # Ask user if they want to restart.
-            restart = input("Enter %s to quit. Enter any other character(s) to restart the game. " %QUIT_CHAR)
-            if restart == QUIT_CHAR:
+            restart = input(f"Enter {config.QUIT_CHAR} to quit. Enter any other character(s) to restart the game. ")
+            if restart == config.QUIT_CHAR:
                 break
-        # Try-except block is necessary in the event that the user has played every word in the word list (see choose_word() in game.py).
+        # Try-except block is necessary in the event that the user has played every word in the word list (see choose_word() in word_guessing_game.py).
         except ValueError as err_msg:
             print(err_msg)
             break
     # End of game loop
-    plural = ''
-    if cumulative_games > 1:
-        plural = 's'
-    print(f"You played {cumulative_games} game{plural}. Your cumulative score was "f"{cumulative_score}.")
+    
     print("Goodbye.")
+    SESSION_STATS.print_report()
 
 
 

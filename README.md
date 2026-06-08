@@ -283,11 +283,13 @@ python main.py
 
 ## TODO FEATURES
 * Web crawler?
-* Multiple different rulesets for game?
+* (DONE) Multiple different rulesets for game?
 * Test cases?
 * GUI? / option to quit at any time?
+- implement hints in the game? <- 1, 2, or 3 hints depending on word length (must be calculated somehow: 1 or 2 for short words, 3 for all words past a certain length)
 
 ## TODO STYLE CHANGES
-- move all globals to a config.py? (https://docs.python.org/3/faq/programming.html#how-do-i-share-global-variables-across-modules)
+- (DONE) move all globals to a config.py? (https://docs.python.org/3/faq/programming.html#how-do-i-share-global-variables-across-modules)
 - change function documentation to docstrings?
 - replace all print stmts' f-strings with C-style strings, or vice-versa?
+- include instruction on how to add new game modes to rulesets.py if desired?: "To add a new game mode, create a new subclass of RuleSet and implement the required methods. Define for yourself: (1) how points are gained and lost, and (2) the win and loss conditions."

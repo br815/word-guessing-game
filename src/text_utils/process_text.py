@@ -1,52 +1,19 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet
 from unicodedata import normalize, combining
 from nltk import pos_tag
 from collections import Counter
+import config
 
 # GLOBALS:
-# Const for minimum length of a word (eg. 5 letters), for filtration.
-MIN_TOK_LEN = 5
-# Const for minimum frequency of a word occurring (eg. twice), for filtration.
-MIN_FREQ_VAL = 2
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.
-# Instead of leaving stopwords as list with O(n) lookup, set() is used for O(1) hash lookup.
+# Instead of leaving stopwords as list with O(n) linear lookup, set() is used for O(1) hash lookup.
 STOPWORDS_SET = set(stopwords.words("english"))
 # Global tokenizer. Checks for sequences of uppercase letters or lowercase letters or apostrophes.
 TOKENIZER = RegexpTokenizer(r"[A-Za-z'’]+")
 # Global lemmatizer.
 LEMMATIZER = WordNetLemmatizer()
-# Boolean for process_text.py (PT) to print debug print statements if desired.
-PT_DEBUGGER = False
-# Penn TreeBank POS tags returned by pos_tag() are NOT compatible with WordNetLemmatizer().
-# This global dictionary maps the specified pos_tags to their equivalent WordNet tags.
-# Add or remove pos_tags to this dict as desired.
-POS_DICT = {
-    # Desired Penn TreeBank tags here are: certain nouns, all verbs, all adjectives, certain adverbs.
-
-    # Nouns:
-    "NN": wordnet.NOUN,
-    "NNS": wordnet.NOUN,
-
-    # Verbs:
-    "VB": wordnet.VERB,
-    "VBD": wordnet.VERB,
-    "VBG": wordnet.VERB,
-    "VBN": wordnet.VERB,
-    "VBP": wordnet.VERB,
-    "VBZ": wordnet.VERB,
-
-    # Adjectives:
-    "JJ": wordnet.ADJ,
-    "JJR": wordnet.ADJ,
-    "JJS": wordnet.ADJ,
-
-    # Adverbs:
-    "RBR": wordnet.ADV,
-    "RBS": wordnet.ADV
-}
 
 
 
@@ -83,18 +50,18 @@ def remove_accents(input_str):
 def is_valid_token(tok):
     # Token must not be a contraction (ie. should not contain ' or ’).
     if "'" in tok or "’" in tok:
-        if PT_DEBUGGER:
+        if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
             print("***Token \"%s\" failed filtration check due to: IS CONTRACTION***" %tok)
         return False
     # Token must not be a stopword.
     if tok in STOPWORDS_SET:
-        if PT_DEBUGGER:
+        if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
             print("***Token \"%s\" failed filtration check due to: IS STOPWORD***" %tok)
         return False
     # Token length must be at least (ie. >=) the minimum length.
-    if len(tok) < MIN_TOK_LEN:
-        if PT_DEBUGGER:
-            print("***Token \"%s\" failed filtration check due to: LENGTH < %i***" %(tok, MIN_TOK_LEN))
+    if len(tok) < config.MIN_TOK_LEN:
+        if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
+            print("***Token \"%s\" failed filtration check due to: LENGTH < %i***" %(tok, config.MIN_TOK_LEN))
         return False
 
     # Return True if token passes all the previous checks.
@@ -142,7 +109,7 @@ def process_text(raw_text):
         print("ERROR: No valid tokens found in the selected input file.")
         return None
 
-    if PT_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
         print("***FILTERED TOKENS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_tokens)
 
     # 4th: POS Tagging.
@@ -153,19 +120,19 @@ def process_text(raw_text):
         (word.lower(), pos)     # Tokens are normalized to lowercase here, once POS filtration is done on each token.
         for word, pos 
         in tags 
-        if pos in POS_DICT]
+        if pos in config.POS_DICT]
 
     # Edge case: if no tokens pass the checks, display error message.
     if len(filtered_pos) == 0:
         print("ERROR: No valid parts of speech were found in the selected input file.")
         return None
     
-    if PT_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
         print("***FILTERED POS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_pos)
 
     # 5th: List comprehension used to lemmatize the filtered tokens, using POS information to get more accurate lemmatization.
     all_lemmas = [
-        LEMMATIZER.lemmatize(word, POS_DICT[pos])   # Use dict mapping to convert pos_tag to WordNet tag.
+        LEMMATIZER.lemmatize(word, config.POS_DICT[pos])   # Use dict mapping to convert pos_tag to WordNet tag.
         for word, pos 
         in filtered_pos]
 
@@ -174,9 +141,9 @@ def process_text(raw_text):
         lemma 
         for lemma 
         in all_lemmas 
-        if len(lemma) >= MIN_TOK_LEN]
+        if len(lemma) >= config.MIN_TOK_LEN]
 
-    if PT_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
         print("***FILTERED LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_lemmas)
 
     # 7th: Count frequencies of each lemma.
@@ -186,7 +153,7 @@ def process_text(raw_text):
         lemma 
         for lemma, count 
         in lemma_counts.most_common()   # most_common() returns items sorted by descending frequency.
-        if count >= MIN_FREQ_VAL]
+        if count >= config.MIN_FREQ_VAL]
 
     # Edge case: if no lemma meets the min freq requirement, just allow words that occur at least once.
     if len(frequent_lemmas) == 0:
@@ -196,7 +163,7 @@ def process_text(raw_text):
             in lemma_counts.most_common() 
             if count >= 1]
 
-    if PT_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.PT_DEBUGGER:
         print("***FREQUENT LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %frequent_lemmas)
 
     return frequent_lemmas

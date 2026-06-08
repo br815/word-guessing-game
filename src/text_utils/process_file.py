@@ -1,8 +1,5 @@
 from pathlib import Path
-
-# GLOBAL:
-# Boolean for process_file.py (PF) to print debug print statements if desired.
-PF_DEBUGGER = False
+import config
 
 
 
@@ -102,7 +99,7 @@ def process_file(dir_name):
 
     raw_text = read_from_selected_file(selected_file)
 
-    if PF_DEBUGGER:
+    if config.PROJECT_DEBUGGER or config.PF_DEBUGGER:
         print("***RAW_TEXT FROM PROCESS_FILE() IS:***\n\"%s\"" %raw_text)
     
     return raw_text
