@@ -293,3 +293,9 @@ python main.py
 - change function documentation to docstrings?
 - replace all print stmts' f-strings with C-style strings, or vice-versa?
 - include instruction on how to add new game modes to rulesets.py if desired?: "To add a new game mode, create a new subclass of RuleSet and implement the required methods. Define for yourself: (1) how points are gained and lost, and (2) the win and loss conditions."
+  1. Add new rulset subclass to rulesets.py
+  2. Add it to the RULESETS dict at the bottom of rulesets.py
+- include instructions on adding globals:
+  1. Add it to config.py <- a global belongs in config.py if it is a developer-adjustable setting, especially if used across multiple source files. Do not create any circular dependencies (eg. The RULESETS dict should not be in config.py because it would require config.py to import classes from rulsets.py, and rulesets.py already has to import config.py).
+  2. Import config.py to target source file (do NOT do "from config import global", bc we want global usage to be explicit in the code).
+  3. When using a global, write config.global (this is more explicit).

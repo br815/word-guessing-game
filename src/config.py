@@ -3,8 +3,9 @@ from nltk.corpus import wordnet
 
 
 
-# GAME QUIT SETTING
+# GAME CHAR SETTINGS
 QUIT_CHAR = '!'
+HINT_CHAR = '?'
 
 
 
@@ -12,7 +13,7 @@ QUIT_CHAR = '!'
 # Project-wide debugger to print all debug statements.
 PROJECT_DEBUGGER = False
 # Boolean specifically for main.py (MAIN) to print its debug statements if desired.
-MAIN_DEBUGGER = True
+MAIN_DEBUGGER = False
 # Boolean specifically for process_file.py (PF) to print its debug statements if desired.
 PF_DEBUGGER = False
 # Boolean specifically for process_text.py (PT) to print its debug statements if desired.

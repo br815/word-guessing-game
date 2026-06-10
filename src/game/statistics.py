@@ -1,7 +1,5 @@
 class Statistics:
-
     def __init__(self):
-
         self.mode = None
         self.games_played = 0
 
@@ -23,6 +21,7 @@ class Statistics:
 
         self.best_completion = None
         self.worst_completion = None
+
 
 
     def record_game(self, game_result):
@@ -62,44 +61,26 @@ class Statistics:
         if self.worst_guesses is None or guesses > self.worst_guesses:
             self.worst_guesses = guesses
 
-        if (
-            self.best_completion is None
-            or completion > self.best_completion
-        ):
+        if (self.best_completion is None or completion > self.best_completion):
             self.best_completion = completion
 
-        if (
-            self.worst_completion is None
-            or completion < self.worst_completion
-        ):
+        if (self.worst_completion is None or completion < self.worst_completion):
             self.worst_completion = completion
 
 
-    def print_report(self):
 
+    def print_report(self):
         if self.games_played == 0:
             print("No games played.")
             return
 
-        avg_score = (
-            self.total_score
-            / self.games_played
-        )
+        avg_score = (self.total_score / self.games_played)
 
-        avg_guesses = (
-            self.total_guesses
-            / self.games_played
-        )
+        avg_guesses = (self.total_guesses / self.games_played)
 
-        avg_completion = (
-            self.total_completion
-            / self.games_played
-        )
+        avg_completion = (self.total_completion / self.games_played)
 
-        win_rate = (
-            self.wins
-            / self.games_played
-        ) * 100
+        win_rate = (self.wins / self.games_played) * 100
 
         print("\n")
         print("=" * 50)
@@ -130,19 +111,10 @@ class Statistics:
 
         print("-" * 50)
 
-        print(
-            f"{'Average Completion':<30}"
-            f"{avg_completion:.1f}%"
-        )
+        print(f"{'Average Completion':<30}{avg_completion:.1f}%")
 
-        print(
-            f"{'Best Completion':<30}"
-            f"{self.best_completion:.1f}%"
-        )
+        print(f"{'Best Completion':<30}{self.best_completion:.1f}%")
 
-        print(
-            f"{'Worst Completion':<30}"
-            f"{self.worst_completion:.1f}%"
-        )
+        print(f"{'Worst Completion':<30}{self.worst_completion:.1f}%")
 
         print("=" * 50)

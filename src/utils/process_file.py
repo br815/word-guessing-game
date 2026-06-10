@@ -28,13 +28,13 @@ def select_file_from_dir(dir_name):
         # Instead of returning None (which results in an infinite loop in main()), raise an exception.
         raise FileNotFoundError("ERROR: Folder \"%s\" contains no files." %dir_name)
 
-    # Display files with numbers & parantheses: 1), 2), ... etc.
-    print("\nPlease select an input file from the following list:")
-    for number, file in enumerate(files, start=1):
-        print(f"{number}) {file.name}")
-
     # User input validation loop.
     while True:
+        # Display files with numbers & parantheses: 1), 2), ... etc.
+        print("\nAVAILABLE INPUT FILES:")
+        for number, file in enumerate(files, start=1):
+            print(f"{number}) {file.name}")
+        
         user_input = input("Choose a file number: ").strip()
 
         # Case 1: input is not int only.

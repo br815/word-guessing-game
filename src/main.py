@@ -1,12 +1,8 @@
 from pathlib import Path
-from text_utils.process_file import process_file
-from text_utils.process_text import process_text
+from utils.process_file import process_file
+from utils.process_text import process_text
 from game.word_guessing_game import WordGuessingGame
-from game.rulesets import (
-    PointsRuleSet,
-    LivesRuleSet,
-    CountdownRuleSet
-)
+from game.rulesets import RULESETS
 from game.statistics import Statistics
 import config
 
@@ -14,7 +10,7 @@ import config
 # Path to this repo's root.
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # Test wordlist to easily run word_guessing_game() on.
-TEST_LIST = ["callous", "germane"]
+TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
 # ...
 SESSION_STATS = Statistics()
 
@@ -53,17 +49,31 @@ if __name__ == "__main__":
         print(word_list)
 
     # Before starting the game loop, user selects a game mode based on ruleset.
-    print("\nSelect a game mode:")
-    print("1. Points Mode")
-    print("2. Lives Mode")
-    print("3. Countdown Mode")
-    game_mode = input("Selection: ")
-    if game_mode == "2":
-        ruleset = LivesRuleSet()
-    elif game_mode == "3":
-        ruleset = CountdownRuleSet()
-    else:
-        ruleset = PointsRuleSet()
+    while True:
+        # Display modes with numbers & parantheses: 1), 2), ... etc.
+        print("\nAVAILABLE GAME MODES:")
+        for key, (name, _) in RULESETS.items():
+            print(f"{key}) {name}")
+        
+        user_input = input("Choose a game mode number: ").strip()
+
+        # Case 1: input is not int only.
+        if not user_input.isdigit():
+            print("ERROR: Input must be within valid range and contain no other characters.")
+            continue
+
+        # Case 2: int is out of range.
+        if user_input not in RULESETS:
+            print(f"ERROR: {user_input} is outside valid range.")
+            continue
+
+        # Valid input received.
+        break
+    # End of user input validation loop
+
+    # Choose user-specified ruleset.
+    _, ruleset_class = RULESETS[user_input]
+    ruleset = ruleset_class()
 
     # Loop word_guessing_game so long as the user wants to keep playing.
     while True:
