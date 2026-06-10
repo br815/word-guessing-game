@@ -1,10 +1,11 @@
+import unicodedata
+import collections
+import config
+
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
-from unicodedata import normalize, combining
 from nltk import pos_tag
-from collections import Counter
-import config
 
 # GLOBALS:
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.
@@ -26,14 +27,14 @@ LEMMATIZER = WordNetLemmatizer()
 					        String for the text with all accented characters replaced. '''
 def remove_accents(input_str):
     # Convert to NFKD: decompose characters into base chars + combining (diacritic) chars.
-    nfkd_form = normalize('NFKD', input_str)
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
 
     # Generator expression used to rejoin base chars into a string.
     unaccented_str = ''.join(
         char 
         for char 
         in nfkd_form 
-        if not combining(char)) # if not a combining (diacritic) char.
+        if not unicodedata.combining(char)) # if not a combining (diacritic) char.
 
     return unaccented_str
 # End of remove_accents()
@@ -148,7 +149,7 @@ def process_text(raw_text):
 
     # 7th: Count frequencies of each lemma.
     # List comprehension used to further filter lemmas only by those appearing "frequently".
-    lemma_counts = Counter(filtered_lemmas)
+    lemma_counts = collections.Counter(filtered_lemmas)
     frequent_lemmas = [
         lemma 
         for lemma, count 

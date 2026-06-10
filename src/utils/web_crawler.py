@@ -1,12 +1,13 @@
-from pathlib import Path
-from urllib.parse import urljoin
+import pathlib
 import requests
+
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 
 
 # GLOBALS (move to config.py?)
-TEXTS_DIR = Path("texts")
+TEXTS_DIR = pathlib.Path("texts")
 MAX_LINKS_PER_PAGE = 10
 
 

@@ -1,14 +1,15 @@
-from pathlib import Path
+import pathlib
+import config
+
 from utils.process_file import process_file
 from utils.process_text import process_text
 from game.word_guessing_game import WordGuessingGame
 from game.rulesets import RULESETS
 from game.statistics import Statistics
-import config
 
 # GLOBALS:
 # Path to this repo's root.
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Test wordlist to easily run word_guessing_game() on.
 TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
 # ...

@@ -299,3 +299,8 @@ python main.py
   1. Add it to config.py <- a global belongs in config.py if it is a developer-adjustable setting, especially if used across multiple source files. Do not create any circular dependencies (eg. The RULESETS dict should not be in config.py because it would require config.py to import classes from rulsets.py, and rulesets.py already has to import config.py).
   2. Import config.py to target source file (do NOT do "from config import global", bc we want global usage to be explicit in the code).
   3. When using a global, write config.global (this is more explicit).
+
+- RIGHT NOW
+  1) inspect if/else logic and return logic (i'd prefer explicit if/else blocks instead of if... then unindented return instead of else) (i'd also prefer explicit variables being returned instead of return[long list of items])
+  2) edit the instructions being printed for each ruleset; this is a stylistic tweak -- make sure the rules are explicit and make grammatical sense.
+  3) then, get to work on converting all printed stmts to f-string, and work on function documentation/commenting.

@@ -1,4 +1,4 @@
-from pathlib import Path
+import pathlib
 import config
 
 
@@ -12,7 +12,7 @@ import config
 					        Relative path to the user-selected file in the given directory. '''
 def select_file_from_dir(dir_name):
     # Build path to target directory.
-    dir = Path(dir_name)
+    dir = pathlib.Path(dir_name)
 
     # List comprehension used to get all files in the target directory.
     files = [
