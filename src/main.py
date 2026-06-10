@@ -55,7 +55,7 @@ if __name__ == "__main__":
         print("\nAVAILABLE GAME MODES:")
         for key, (name, _) in RULESETS.items():
             print(f"{key}) {name}")
-        
+
         user_input = input("Choose a game mode number: ").strip()
 
         # Case 1: input is not int only.
@@ -105,7 +105,4 @@ if __name__ == "__main__":
     
     print("Goodbye.")
     SESSION_STATS.print_report()
-
-
-
 # End of main()

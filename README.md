@@ -302,5 +302,7 @@ python main.py
 
 - RIGHT NOW
   1) inspect if/else logic and return logic (i'd prefer explicit if/else blocks instead of if... then unindented return instead of else) (i'd also prefer explicit variables being returned instead of return[long list of items])
+    - make sure to do this inspection for all the files in game/
+    - also, remember to add debug print stmts to the code in word_guessing_game.py
   2) edit the instructions being printed for each ruleset; this is a stylistic tweak -- make sure the rules are explicit and make grammatical sense.
   3) then, get to work on converting all printed stmts to f-string, and work on function documentation/commenting.

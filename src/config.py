@@ -27,7 +27,7 @@ PT_DEBUGGER = False
 MIN_TOK_LEN = 5
 # Const for minimum frequency of a word occurring (eg. twice), for filtration.
 MIN_FREQ_VAL = 2
-# Penn TreeBank POS tags returned by pos_tag() are NOT compatible with WordNetLemmatizer().
+# Penn TreeBank POS tags returned by nltk.pos_tag() are NOT compatible with WordNetLemmatizer().
 # This global dictionary maps the specified pos_tags to their equivalent WordNet tags.
 # Add or remove pos_tags to this dict as desired (and update the POS table in README accordingly).
 POS_DICT = {
