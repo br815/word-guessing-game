@@ -1,5 +1,4 @@
 import config
-
 from text_utils.process_file import process_file
 from text_utils.process_text import process_text
 from web_utils.text_file_generator import generate_text_file
@@ -10,14 +9,12 @@ from game.statistics import Statistics
 # GLOBALS:
 # Test wordlist to easily run word_guessing_game() on.
 TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
-# A Statistics() object for tracking & recording the statistics of a game.
-GAME_STATS = Statistics()
 
 
 
 def load_word_list(dir_with_texts):
     try:
-        while True:
+        while True:           
             # Attempt to get valid input text from file.
             input_file_text = process_file(dir_with_texts)
 
@@ -39,10 +36,6 @@ def load_word_list(dir_with_texts):
     except FileNotFoundError as err_msg:
         print(err_msg)
         exit()
-
-    if config.MAIN_DEBUGGER or config.DEBUG_ALL:
-        print("***LIST OF VALID WORDS FROM MAIN():***")
-        print(word_list)
     
     return word_list
 # End of load_word_list()
@@ -74,10 +67,7 @@ def load_ruleset():
     # End of user input validation loop
 
     # Load the user-specified ruleset.
-    mode_name, ruleset_class = RULESETS[user_input]
-
-    if config.MAIN_DEBUGGER or config.DEBUG_ALL:
-        print(f"***CHOSEN RULESET FROM MAIN(): {mode_name}***")
+    _, ruleset_class = RULESETS[user_input]
     
     return ruleset_class()
 # End of load_ruleset()
@@ -85,22 +75,22 @@ def load_ruleset():
 
 
 def run_game(word_list, ruleset):
+    # Instantiate a Statistics object to track & record the statistics of all games played during the current session.
+    this_session = Statistics()
+
     # Loop word_guessing_game so long as the user wants to keep playing.
     while True:
         try:
-            if config.MAIN_DEBUGGER or config.DEBUG_ALL:
-                # Instantiate a WordGuessingGame object using the global test list.
-                this_game = WordGuessingGame(TEST_LIST, ruleset)
-            else:
-                # Instantiate a WordGuessingGame object using the processed word list.
-                this_game = WordGuessingGame(word_list, ruleset)
-            
+            # Instantiate a WordGuessingGame object on the given word list.
+            this_game = WordGuessingGame(word_list, ruleset)
+
             # Call the actual function to play the game, then store its results (return format is dict).
             game_results = this_game.play_game()
-            # Update stats tracker.
-            GAME_STATS.record_game(game_results)
 
-            # Ask user if they want to restart.
+            # Update stats tracker.
+            this_session.record_game(game_results)
+
+            # Ask user if they want to continue or end the session.
             restart = input(f"Enter {config.QUIT_CHAR} to quit. Enter any other character(s) to restart the game. ")
             if restart == config.QUIT_CHAR:
                 break
@@ -110,7 +100,8 @@ def run_game(word_list, ruleset):
             break
     # End of game loop
 
-    GAME_STATS.print_report()
+    # Print the session's statistics report.
+    this_session.print_report()
 # End of run_game()
 
 
@@ -131,19 +122,33 @@ def main():
     print("MAIN MENU\n1) Generate Input File (crawl web)\n2) Play Word Guessing Game\n")
     #user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit.").strip()
 
-    # Load word list and ruleset.
-    word_list = load_word_list(config.TEXTS)
+    # Load word list.
+    if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
+        print("***TEST LIST FROM MAIN():***")
+        print(TEST_LIST)
+    else:
+        word_list = load_word_list(config.TEXTS)
+        if config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
+            print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
+            print(word_list)
+    
+    # Load ruleset.
     ruleset = load_ruleset()
+    if config.MAIN_DEBUGGER_TEST_LIST or config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
+        print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
 
     # Run game with given word list and ruleset.
-    run_game(word_list, ruleset)
-    
+    if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
+        run_game(TEST_LIST, ruleset)
+    else:
+        run_game(word_list, ruleset)
+
     print("\nGoodbye.\n")
 # End of main()
 
 
 
 if __name__ == "__main__":
-    main()
-    #run_crawler()
+    #main()
+    run_crawler()
 # End of main()

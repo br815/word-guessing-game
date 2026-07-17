@@ -1,5 +1,4 @@
 import config
-
 import os
 from datetime import datetime
 from web_utils.web_scraper import scrape_page

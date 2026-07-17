@@ -1,7 +1,6 @@
+import config
 import unicodedata
 import collections
-import config
-
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer

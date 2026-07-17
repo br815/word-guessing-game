@@ -1,6 +1,6 @@
-import re
-import random
 import config
+import random
+import re
 
 
 

@@ -5,32 +5,34 @@ from nltk.corpus import wordnet
 
 
 
-# The path to the sub-directory with text input files.
+### PATH TO REPO'S SUB-DIRECTORY CONTAINING TXT INPUT FILES
 TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
 
 
 
-# SPECIAL CHARS FOR GAME SETTINGS
+### SPECIAL CHARS FOR GAME SETTINGS
 QUIT_CHAR = '!'
 HINT_CHAR = '?'
 
 
 
-# CODE DEBUGGERS
+### CODE DEBUGGERS
 # Project-wide debugger to trigger all debug statements.
 DEBUG_ALL = False
-# Boolean specifically for main.py to print its debug statements if desired.
-MAIN_DEBUGGER = False
 # Boolean specifically for process_file.py to print its debug statements if desired.
 PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
 GAME_DEBUGGER = False
+# Two booleans specifically for main.py to print its debug statements if desired:
+# one for a hard-coded test list, and one for the user-selected word list.
+MAIN_DEBUGGER_TEST_LIST = False
+MAIN_DEBUGGER_WORD_LIST = False
 
 
 
-# TEXT PROCESSING SETTINGS
+### TEXT PROCESSING SETTINGS
 # Const for minimum length of a word (eg. 5 letters), for filtration.
 MIN_TOK_LEN = 5
 # Const for minimum frequency of a word occurring (eg. twice), for filtration.
