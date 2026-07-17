@@ -1,24 +1,32 @@
+# For TEXTS.
+import pathlib
 # For POS_DICT.
 from nltk.corpus import wordnet
 
 
 
-# GAME CHAR SETTINGS
+# The path to the sub-directory with text input files.
+TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
+
+
+
+# SPECIAL CHARS FOR GAME SETTINGS
 QUIT_CHAR = '!'
 HINT_CHAR = '?'
 
 
 
 # CODE DEBUGGERS
-# Project-wide debugger to print all debug statements.
-PROJECT_DEBUGGER = False
-# Boolean specifically for main.py (MAIN) to print its debug statements if desired.
+# Project-wide debugger to trigger all debug statements.
+DEBUG_ALL = False
+# Boolean specifically for main.py to print its debug statements if desired.
 MAIN_DEBUGGER = False
-# Boolean specifically for process_file.py (PF) to print its debug statements if desired.
-PF_DEBUGGER = False
-# Boolean specifically for process_text.py (PT) to print its debug statements if desired.
-PT_DEBUGGER = False
-# GAME_DEBUGGER? Doesn't exist yet...
+# Boolean specifically for process_file.py to print its debug statements if desired.
+PROCESS_FILE_DEBUGGER = False
+# Boolean specifically for process_text.py to print its debug statements if desired.
+PROCESS_TEXT_DEBUGGER = False
+# Boolean specifically for word_guess_game.py to print its debug statements if desired.
+GAME_DEBUGGER = False
 
 
 

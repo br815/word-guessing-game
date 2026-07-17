@@ -165,7 +165,7 @@ To view your downloaded `NLTK` data in File Explorer, note the Download director
   <!-- CODE END -->
 
 ## Install Requests & Beautiful Soup
-The Python libraries `Requests` and `Beautiful Soup` are necessary to run the web crawler portion of this project.
+The Python libraries `Requests` and `Beautiful Soup` are necessary to run the web scraper portion of this project.
 
 To install `Requests`, open the terminal and run:
 <!-- CODE START -->
@@ -289,9 +289,7 @@ python main.py
 - implement hints in the game? <- 1, 2, or 3 hints depending on word length (must be calculated somehow: 1 or 2 for short words, 3 for all words past a certain length)
 
 ## TODO STYLE CHANGES
-- (DONE) move all globals to a config.py? (https://docs.python.org/3/faq/programming.html#how-do-i-share-global-variables-across-modules)
 - change function documentation to docstrings?
-- replace all print stmts' f-strings with C-style strings, or vice-versa?
 - include instruction on how to add new game modes to rulesets.py if desired?: "To add a new game mode, create a new subclass of RuleSet and implement the required methods. Define for yourself: (1) how points are gained and lost, and (2) the win and loss conditions."
   1. Add new rulset subclass to rulesets.py
   2. Add it to the RULESETS dict at the bottom of rulesets.py
@@ -301,8 +299,6 @@ python main.py
   3. When using a global, write config.global (this is more explicit).
 
 - RIGHT NOW
-  1) inspect if/else logic and return logic (i'd prefer explicit if/else blocks instead of if... then unindented return instead of else) (i'd also prefer explicit variables being returned instead of return[long list of items])
-    - make sure to do this inspection for all the files in game/
-    - also, remember to add debug print stmts to the code in word_guessing_game.py
+  1) finish checking guard clauses (if/else block logic & return logic) in rulesets.py and statistics.py.
   2) edit the instructions being printed for each ruleset; this is a stylistic tweak -- make sure the rules are explicit and make grammatical sense.
-  3) then, get to work on converting all printed stmts to f-string, and work on function documentation/commenting.
+  3) then, get to work on function documentation/commenting <- change all comments style to match reST style (or javadoc style?). Sections: Param (or Args), Returns, Raises. (Do not consider "self" in Args.) <- Look up examples of reST/javadoc/other styles online.

@@ -10,7 +10,8 @@ from bs4 import BeautifulSoup
 TEXTS_DIR = pathlib.Path("texts")
 MAX_LINKS_PER_PAGE = 10
 
-
+# Discovering and recursively following links is web crawling,
+# while parsing HTML to extract specific data is web scraping.
 
 def fetch_page(url):
     """

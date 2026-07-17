@@ -7,12 +7,13 @@ class RuleSet(ABC):
     """
     Abstract base class for all game rule systems.
     """
-    # Print base rules about ! and ?
+    # Print base rules that apply to all subclasses, ie. how to quit, how to use hints.
     def print_rules(self):
         print("\n---WORD GUESSING GAME---")
         print("Let's play a word guessing game!")
         print(f"Enter {config.QUIT_CHAR} at any time to quit.")
         print(f"Enter {config.HINT_CHAR} to use a hint.")
+        # Then print the rules specific to a subclass.
         self.print_mode_rules()
 
     @abstractmethod
@@ -24,7 +25,7 @@ class RuleSet(ABC):
         pass
 
     @abstractmethod
-    def update(self, current_value, correct_guess, occurrences):
+    def update(self, current_value, guess_is_correct, occurrences):
         pass
 
     @abstractmethod
@@ -61,14 +62,19 @@ class PointsRuleSet(RuleSet):
         print("Lose when score goes below 0.")
 
     def initial_value(self):
+        # The number of points starts at the minimum length of a token in the wordlist.
         return config.MIN_TOK_LEN
 
-    def update(self, score, correct_guess, occurrences):
-        if correct_guess:
+    def update(self, score, guess_is_correct, occurrences):
+        if guess_is_correct:
+            # A correct guess increments the score by the number of times that guess appears in the word.
             return score + occurrences
-        return score - 1
+        else:
+            # An incorrect guess decrements the score by 1 point.
+            return score - 1
 
     def has_lost(self, score):
+        # The lose condition is once the score goes BELOW 0 (ie. reaches -1).
         return score < 0
 
     def display_label(self):
@@ -101,14 +107,19 @@ class LivesRuleSet(RuleSet):
         print("Correct guesses do not restore lives.")
 
     def initial_value(self):
+        # The number of lives starts at the maximum amount.
         return self.STARTING_LIVES
 
-    def update(self, lives, correct_guess, occurrences):
-        if correct_guess:
+    def update(self, lives, guess_is_correct, occurrences):
+        if guess_is_correct:
+            # A correct guess leaves the number of lives unchanged.
             return lives
-        return lives - 1
+        else:
+            # An incorrect guess uses a life.
+            return lives - 1
 
     def has_lost(self, lives):
+        # The lose condition is if the number of lives goes down to 0.
         return lives <= 0
 
     def display_label(self):
@@ -139,12 +150,15 @@ class CountdownRuleSet(RuleSet):
         print("Solve the word before reaching 0.")
 
     def initial_value(self):
+        # Score starts at maximum points.
         return self.STARTING_SCORE
 
-    def update(self, score, correct_guess, occurrences):
+    def update(self, score, guess_is_correct, occurrences):
+        # Score decrements regardless of if a guess is correct or incorrect.
         return score - self.GUESS_COST
 
     def has_lost(self, score):
+        # The lose condition is if the score goes down to 0.
         return score <= 0
 
     def display_label(self):
@@ -176,17 +190,19 @@ class StreakRuleSet(RuleSet):
         print("Enter ! at any time to quit.")
 
     def initial_value(self):
-        """
-        Value represents current streak.
-        """
+        # Streak starts at 0.
         return 0
 
-    def update(self, current_value, correct_guess, occurrences):
-        if correct_guess:
+    def update(self, current_value, guess_is_correct, occurrences):
+        if guess_is_correct:
+            # A correct guess increments the streak.
             return current_value + 1
-        return 0
+        else:
+            # An incorrect guess resets the streak to 0.
+            return 0
 
     def has_lost(self, current_value):
+        # There is no lose condition in this mode; the player can only end the game by quitting.
         return False
 
     def display_label(self):

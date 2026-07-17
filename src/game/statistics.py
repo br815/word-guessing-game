@@ -24,13 +24,13 @@ class Statistics:
 
 
 
-    def record_game(self, game_result):
+    def record_game(self, game_results):
         if self.mode is None:
-            self.mode = game_result["mode"]
-        result = game_result["result"]
-        score = game_result["score"]
-        guesses = game_result["guesses"]
-        completion = game_result["completion"]
+            self.mode = game_results["mode"]
+        result = game_results["result"]
+        score = game_results["score"]
+        guesses = game_results["guesses"]
+        completion = game_results["completion"]
 
         self.games_played += 1
 
@@ -94,7 +94,7 @@ class Statistics:
 
         print("-" * 50)
 
-        print(f"{'Win Rate':<30}{win_rate:.1f}%")
+        print(f"{'Win Rate':<30}{win_rate:.2f}%")
 
         print("-" * 50)
 
@@ -111,10 +111,10 @@ class Statistics:
 
         print("-" * 50)
 
-        print(f"{'Average Completion':<30}{avg_completion:.1f}%")
+        print(f"{'Average Completion':<30}{avg_completion:.2f}%")
 
-        print(f"{'Best Completion':<30}{self.best_completion:.1f}%")
+        print(f"{'Best Completion':<30}{self.best_completion:.2f}%")
 
-        print(f"{'Worst Completion':<30}{self.worst_completion:.1f}%")
+        print(f"{'Worst Completion':<30}{self.worst_completion:.2f}%")
 
         print("=" * 50)
