@@ -3,8 +3,6 @@ import pathlib
 # For POS_DICT.
 from nltk.corpus import wordnet
 
-
-
 ### PATH TO REPO'S SUB-DIRECTORY CONTAINING TXT INPUT FILES
 TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
 
@@ -24,11 +22,11 @@ PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = False
+GAME_DEBUGGER = True
 # Two booleans specifically for main.py to print its debug statements if desired:
 # one for a hard-coded test list, and one for the user-selected word list.
 MAIN_DEBUGGER_TEST_LIST = False
-MAIN_DEBUGGER_WORD_LIST = False
+MAIN_DEBUGGER_WORD_LIST = True
 
 
 

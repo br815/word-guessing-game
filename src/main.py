@@ -1,10 +1,11 @@
+import sys
 import config
+from game.rulesets import RULESETS
+from game.statistics import Statistics
+from game.word_guessing_game import WordGuessingGame
 from text_utils.process_file import process_file
 from text_utils.process_text import process_text
 from web_utils.text_file_generator import generate_text_file
-from game.word_guessing_game import WordGuessingGame
-from game.rulesets import RULESETS
-from game.statistics import Statistics
 
 # GLOBALS:
 # Test wordlist to easily run word_guessing_game() on.
@@ -12,31 +13,39 @@ TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
 
 
 
-def load_word_list(dir_with_texts):
-    try:
-        while True:           
-            # Attempt to get valid input text from file.
-            input_file_text = process_file(dir_with_texts)
+def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
+    # If the test list has not been provided, generate a word list from a user-chosen input file.
+    if word_list is None:
+        # Try-except block is necessary in case the provided directory does not exist (see select_file_from_dir() in process_file.py).
+        try:
+            while True:
+                # Attempt to get valid input text from file.
+                input_file_name, input_file_text = process_file(dir_with_texts)
 
-            # If file processing failed, user must choose another file.
-            if input_file_text is None:
-                continue
+                # If file processing failed, return to main().
+                if input_file_text is None:
+                    return None
 
-            # Attempt to process input text.
-            word_list = process_text(input_file_text)
+                # Attempt to process input text.
+                word_list = process_text(input_file_name, input_file_text)
 
-            # If text processing failed, user must choose another file.
-            if word_list is None:
-                continue
+                # If text processing failed, return to main().
+                if word_list is None:
+                    return None
 
-            # Valid word list generated.
-            break
-        # End of user input validation loop
-    # Try-except block is necessary in the event that the provided directory does not exist (see select_file_from_dir() in process_file.py).
-    except FileNotFoundError as err_msg:
-        print(err_msg)
-        exit()
-    
+                # Valid word list generated.
+                break
+            # End of user input validation loop
+        except FileNotFoundError as err_msg:
+            print(err_msg)
+            sys.exit()
+
+    # Filter out words that have already been played in this session (ie. across all chosen input files, or across all loads of the test list).
+    word_list = [
+        word
+        for word in word_list
+        if word not in words_played_set]
+
     return word_list
 # End of load_word_list()
 
@@ -74,34 +83,17 @@ def load_ruleset():
 
 
 
-def run_game(word_list, ruleset):
-    # Instantiate a Statistics object to track & record the statistics of all games played during the current session.
-    this_session = Statistics()
-
-    # Loop word_guessing_game so long as the user wants to keep playing.
-    while True:
-        try:
-            # Instantiate a WordGuessingGame object on the given word list.
-            this_game = WordGuessingGame(word_list, ruleset)
-
-            # Call the actual function to play the game, then store its results (return format is dict).
-            game_results = this_game.play_game()
-
-            # Update stats tracker.
-            this_session.record_game(game_results)
-
-            # Ask user if they want to continue or end the session.
-            restart = input(f"Enter {config.QUIT_CHAR} to quit. Enter any other character(s) to restart the game. ")
-            if restart == config.QUIT_CHAR:
-                break
-        # Try-except block is necessary in the event that the user has played every word in the word list (see choose_word() in word_guessing_game.py).
-        except ValueError as err_msg:
-            print(err_msg)
-            break
-    # End of game loop
-
-    # Print the session's statistics report.
-    this_session.print_report()
+def run_game(word_list, ruleset, this_session):
+    try:
+        # Instantiate a WordGuessingGame object on the given word list.
+        this_game = WordGuessingGame(word_list, ruleset)
+        # Call the actual function to play the game, then store its results (return format is dict).
+        game_results = this_game.play_game()
+        # Update stats tracker.
+        this_session.record_game(game_results)
+    # Try-except block is necessary in the event that the user has played every word in the word list (see choose_word() in word_guessing_game.py).
+    except ValueError as err_msg:
+        print(err_msg)
 # End of run_game()
 
 
@@ -119,36 +111,77 @@ def run_crawler():
 
 
 def main():
-    print("MAIN MENU\n1) Generate Input File (crawl web)\n2) Play Word Guessing Game\n")
-    #user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit.").strip()
+    # Instantiate a Statistics object to track & record the statistics of all games played during the current session.
+    this_session = Statistics()
 
-    # Load word list.
-    if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
-        print("***TEST LIST FROM MAIN():***")
-        print(TEST_LIST)
-    else:
-        word_list = load_word_list(config.TEXTS)
-        if config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
-            print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
-            print(word_list)
-    
-    # Load ruleset.
-    ruleset = load_ruleset()
-    if config.MAIN_DEBUGGER_TEST_LIST or config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
-        print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
+    # Main menu loop.
+    while True:
+        # ...
+        print(f"\nMAIN MENU\n1) Generate Input File (crawl web)\n2) Play Word Guessing Game\n{config.QUIT_CHAR}) Quit")
+        
+        user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit. ").strip()
 
-    # Run game with given word list and ruleset.
-    if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
-        run_game(TEST_LIST, ruleset)
-    else:
-        run_game(word_list, ruleset)
+        if user_input == config.QUIT_CHAR:
+            break
 
+        # Case 1: input is not int only.
+        if not user_input.isdigit():
+            print("ERROR: Input must be from among the options listed.")
+            continue
+
+        # If this point has been reached, input must be an int and can be cast as such.
+        choice = int(user_input)
+
+        # Case 2: int is out of range.
+        if choice < 1 or choice > 2:
+            print(f"ERROR: {choice} is outside valid range.")
+            continue
+        # Valid input received.
+
+        # Option 1: run web crawler.
+        if choice == 1:
+            #run_crawler()
+            print("***RUN_CRAWLER DEBUG STMT!!!***")
+            continue
+
+        # Option 2: run word guessing game.
+        if choice == 2:
+            # Load word list.
+            if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
+                word_list = load_word_list(this_session.words_played, word_list=TEST_LIST)
+                print("***LIST OF TEST WORDS FROM MAIN():***")
+                print(word_list)
+            else:
+                word_list = load_word_list(this_session.words_played, dir_with_texts=config.TEXTS)
+                if config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
+                    print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
+                    print(word_list)
+
+            # "None" means: the input file itself was invalid (ie. it could not produce a valid word list):
+            if word_list is None:
+                continue
+            # "not" means: the input file was valid, but its word list is empty (ie. every word in it has already been played this session):
+            if not word_list:
+                print("Congratulations! You have played every word available in this word list.")
+                continue
+
+            # Load ruleset.
+            ruleset = load_ruleset()
+            if config.MAIN_DEBUGGER_TEST_LIST or config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
+                print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
+
+            # Run game with given word list and ruleset.
+            run_game(word_list, ruleset, this_session)
+            continue
+    # End of main menu loop
+
+    # Print the session's statistics report.
+    this_session.print_report()
     print("\nGoodbye.\n")
 # End of main()
 
 
 
 if __name__ == "__main__":
-    #main()
-    run_crawler()
-# End of main()
+    main()
+# End of __main__

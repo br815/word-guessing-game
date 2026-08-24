@@ -103,10 +103,10 @@ def process_file(dir_name):
     """
     selected_file = select_file_from_dir(dir_name)
 
-    input_file_text = read_from_selected_file(selected_file)
+    selected_file_text = read_from_selected_file(selected_file)
 
     if config.PROCESS_FILE_DEBUGGER or config.DEBUG_ALL:
-        print(f"***INOUT_FILE_TEXT FROM PROCESS_FILE() IS:***\n\"{input_file_text}\"")
+        print(f"***INPUT_FILE_TEXT FROM PROCESS_FILE() IS:***\n\"{selected_file_text}\"")
     
-    return input_file_text
+    return selected_file.name, selected_file_text
 # End of process_file()

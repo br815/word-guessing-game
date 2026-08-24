@@ -1,6 +1,9 @@
 import config
 from abc import ABC, abstractmethod
 
+# GLOBALS:
+# Add new rulesets to RULESETS at the end of this file.
+
 
 
 class RuleSet(ABC):
@@ -86,7 +89,7 @@ class LivesRuleSet(RuleSet):
     """
     Hangman-style mode.
 
-    Start with 6 lives.
+    Start with 6 lives (symbolizing the head, body, 2 arms, 2 legs).
 
     Correct:
         no change
@@ -177,8 +180,7 @@ class StreakRuleSet(RuleSet):
         streak = 0
 
     No loss condition.
-    The player may continue until the word is solved
-    or they choose to quit.
+    The player may continue until the word is solved or they choose to quit.
     """
 
     def print_mode_rules(self):
@@ -214,5 +216,6 @@ RULESETS = {"1": ("Points Mode", PointsRuleSet),
             "2": ("Lives Mode", LivesRuleSet),
             "3": ("Countdown Mode", CountdownRuleSet),
             "4": ("Streak Mode", StreakRuleSet)
+
             # Remember to add new rulesets here (don't forget the preceding comma!)
             }

@@ -30,16 +30,12 @@ class WordGuessingGame:
         """
         Function 1:	        choose_word()
 	    Descr:              This function ...
-                            It raises a ValueError if no elements are in the word list.
+                            It raises a ValueError if no elements are in the word list. (NO LONGER)
                             It is called by play_game().
 	    Param:              N/A.
 	    Return:             None.
         """
-        # First, check that the word list even has anything in it; if it doesn't, raise an exception and display a farewell message.
-        if len(self.word_list) == 0:
-            raise ValueError("Congratulations! You have played every word available in the word list.")
-
-        # Else, select a random integer within the range of the word list & retrieve the word at that index.
+        # Select a random integer within the range of the word list & retrieve the word at that index.
         index = random.randint(0, len(self.word_list) - 1)
         # Remove the word from the word list so that the same word is never chosen twice across games.
         self.word = self.word_list.pop(index)
@@ -307,6 +303,7 @@ class WordGuessingGame:
         # Fill out the return dict with the statistics of the game (intended to be compatible with record_game() in the Statistics class).
         game_results = {
             "mode": self.ruleset.display_label(),
+            "word": self.word,
             "result": result,
             "score": self.value,
             "guesses": len(self.guesses), 

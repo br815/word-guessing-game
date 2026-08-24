@@ -74,7 +74,7 @@ def is_valid_token(tok):
 
 
 
-def process_text(raw_text):
+def process_text(raw_text_file_name, raw_text):
     """
     Function 3:         process_text()
 	Descr:              This function tokenizes, lemmatizes, and counts lemma frequencies of a given text.
@@ -91,8 +91,8 @@ def process_text(raw_text):
                         Token length > MIN_TOK_LEN is checked twice. 
                         First, during token filtration, it helps to reduce the size/cost of POS tagging & lemmatization later.
                         Then, after lemmatization, it is necessary to validate that the shortened words themselves are at least the min length.
-	Param:              raw_text
-                        A string of unprocessed text.
+	Param:              raw_text_file_name, raw_text
+                        A string of unprocessed text, and the name of the input file it came from (for printing error msgs).
 	Return:             frequent_lemmas
 					    A list of the lemmas that occur frequently and meet all desired conditions.
     """
@@ -112,7 +112,7 @@ def process_text(raw_text):
 
     # Edge case: if no tokens pass the checks, display error message.
     if len(filtered_tokens) == 0:
-        print("ERROR: No valid tokens found in the selected input file.")
+        print(f"ERROR: File \"{raw_text_file_name}\" contains no valid tokens.")
         return None
 
     if config.PROCESS_TEXT_DEBUGGER or config.DEBUG_ALL:
@@ -130,7 +130,7 @@ def process_text(raw_text):
 
     # Edge case: if no tokens pass the checks, display error message.
     if len(filtered_pos) == 0:
-        print("ERROR: No valid parts of speech were found in the selected input file.")
+        print(f"ERROR: File \"{raw_text_file_name}\" contains no valid parts of speech.")
         return None
     
     if config.PROCESS_TEXT_DEBUGGER or config.DEBUG_ALL:
