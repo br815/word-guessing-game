@@ -8,6 +8,11 @@ TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
 
 
 
+### TEST LIST TO TEST WORD GUESSING GAME ON
+TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
+
+
+
 ### SPECIAL CHARS FOR GAME SETTINGS
 QUIT_CHAR = '!'
 HINT_CHAR = '?'
@@ -17,16 +22,22 @@ HINT_CHAR = '?'
 ### CODE DEBUGGERS
 # Project-wide debugger to trigger all debug statements.
 DEBUG_ALL = False
+# Boolean specifically for web_scraper.py to print its debug statements if desired.
+WEB_SCRAPER_DEBUGGER = True
+# Boolean specifically for web_crawler.py to print its debug statements if desired.
+WEB_CRAWLER_DEBUGGER = True
+# Boolean specifically for generate_texts.py to print its debug statements if desired.
+GENERATE_TEXTS_DEBUGGER = True
 # Boolean specifically for process_file.py to print its debug statements if desired.
 PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = True
+GAME_DEBUGGER = False
 # Two booleans specifically for main.py to print its debug statements if desired:
-# one for a hard-coded test list, and one for the user-selected word list.
-MAIN_DEBUGGER_TEST_LIST = False
-MAIN_DEBUGGER_WORD_LIST = True
+MAIN_DEBUGGER_TEST_LIST = True
+# the one above for the hard-coded test list, and one below for the user-selected word list.
+MAIN_DEBUGGER_WORD_LIST = False
 
 
 

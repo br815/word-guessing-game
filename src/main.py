@@ -7,10 +7,6 @@ from text_utils.process_file import process_file
 from text_utils.process_text import process_text
 from web_utils.text_file_generator import generate_text_file
 
-# GLOBALS:
-# Test wordlist to easily run word_guessing_game() on.
-TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
-
 
 
 def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
@@ -84,28 +80,54 @@ def load_ruleset():
 
 
 def run_game(word_list, ruleset, this_session):
-    try:
-        # Instantiate a WordGuessingGame object on the given word list.
-        this_game = WordGuessingGame(word_list, ruleset)
-        # Call the actual function to play the game, then store its results (return format is dict).
-        game_results = this_game.play_game()
-        # Update stats tracker.
-        this_session.record_game(game_results)
-    # Try-except block is necessary in the event that the user has played every word in the word list (see choose_word() in word_guessing_game.py).
-    except ValueError as err_msg:
-        print(err_msg)
+    # Instantiate a WordGuessingGame object on the given word list.
+    this_game = WordGuessingGame(word_list, ruleset)
+    # Call the actual function to play the game, then store its results (return format is dict).
+    game_results = this_game.play_game()
+    # Update stats tracker.
+    this_session.record_game(game_results)
 # End of run_game()
 
 
 
 def run_crawler():
-    seed_url = input("Enter starting URL: ")
+    seed_url = input("Enter starting URL: ").strip()
+
+    while True:
+        page_count = input(
+            "How many webpages should be collected? "
+        ).strip()
+
+        if not page_count.isdigit():
+            print(
+                "ERROR: Number of webpages must be a positive integer."
+            )
+            continue
+
+        page_count = int(page_count)
+
+        if page_count < 1:
+            print(
+                "ERROR: Number of webpages must be at least 1."
+            )
+            continue
+
+        break
 
     print("\nCrawling website... please wait.\n")
 
-    file_path = generate_text_file(seed_url)
+    try:
+        file_path = generate_text_file(
+            seed_url,
+            page_count
+        )
+    except ValueError as err_msg:
+        print(err_msg)
+        return
 
-    print(f"\nNew input file created: {file_path}")
+    print(
+        f"\nNew input file created: {file_path}"
+    )
 # End of run_crawler()
 
 
@@ -140,15 +162,15 @@ def main():
 
         # Option 1: run web crawler.
         if choice == 1:
-            #run_crawler()
-            print("***RUN_CRAWLER DEBUG STMT!!!***")
+            run_crawler()
+            #print("***RUN_CRAWLER DEBUG STMT!!!***")
             continue
 
         # Option 2: run word guessing game.
         if choice == 2:
             # Load word list.
             if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
-                word_list = load_word_list(this_session.words_played, word_list=TEST_LIST)
+                word_list = load_word_list(this_session.words_played, word_list=config.TEST_LIST)
                 print("***LIST OF TEST WORDS FROM MAIN():***")
                 print(word_list)
             else:
@@ -157,10 +179,10 @@ def main():
                     print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
                     print(word_list)
 
-            # "None" means: the input file itself was invalid (ie. it could not produce a valid word list):
+            # "None" means: the input file itself contained only invalid words (ie. it could not produce a valid word list):
             if word_list is None:
                 continue
-            # "not" means: the input file was valid, but its word list is empty (ie. every word in it has already been played this session):
+            # "not" means: the input file contained valid words, but its word list is empty (ie. every word in it has already been played this session):
             if not word_list:
                 print("Congratulations! You have played every word available in this word list.")
                 continue

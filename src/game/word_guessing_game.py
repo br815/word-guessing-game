@@ -59,7 +59,8 @@ class WordGuessingGame:
 
     def display_game_state(self):
         # Print a header to clearly separate this iteration of the display from the printout of the previous result.
-        print(f"\n{len(self.word) * 2 * "-"}\n")
+        #print(f"\n{len(self.word) * 2 * "="}\n")   # This header is the length of the word itself.
+        print(f"\n{24 * "="}\n")                    # This header matches the length of the rules header in the Rulesets class.
 
         # Display the word in whatever incompleted or completed state it's in, with spaces between every element of the list.
         print(' '.join(self.display))

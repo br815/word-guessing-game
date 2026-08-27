@@ -12,10 +12,11 @@ class RuleSet(ABC):
     """
     # Print base rules that apply to all subclasses, ie. how to quit, how to use hints.
     def print_rules(self):
-        print("\n---WORD GUESSING GAME---")
+        print("\n===WORD GUESSING GAME===")
         print("Let's play a word guessing game!")
         print(f"Enter {config.QUIT_CHAR} at any time to quit.")
         print(f"Enter {config.HINT_CHAR} to use a hint.")
+        print("=" * 24)
         # Then print the rules specific to a subclass.
         self.print_mode_rules()
 
@@ -58,7 +59,7 @@ class PointsRuleSet(RuleSet):
     """
 
     def print_mode_rules(self):
-        print("\nPOINTS MODE")
+        print("POINTS MODE")
         print(f"Start with {config.MIN_TOK_LEN} points.")
         print("Correct guess: + number of occurrences.")
         print("Incorrect guess: -1 point.")
@@ -104,7 +105,7 @@ class LivesRuleSet(RuleSet):
     STARTING_LIVES = 6
 
     def print_mode_rules(self):
-        print("\nLIVES MODE")
+        print("LIVES MODE")
         print(f"Start with {self.STARTING_LIVES} lives.")
         print("Incorrect guesses cost one life.")
         print("Correct guesses do not restore lives.")
@@ -147,7 +148,7 @@ class CountdownRuleSet(RuleSet):
     GUESS_COST = 5
 
     def print_mode_rules(self):
-        print("\nCOUNTDOWN MODE")
+        print("COUNTDOWN MODE")
         print(f"Start with {self.STARTING_SCORE} points.")
         print(f"Every guess costs {self.GUESS_COST} points.")
         print("Solve the word before reaching 0.")
@@ -184,7 +185,7 @@ class StreakRuleSet(RuleSet):
     """
 
     def print_mode_rules(self):
-        print("\nSTREAK MODE")
+        print("STREAK MODE")
         print("Build the longest streak of consecutive correct guesses possible.")
         print("Each correct guess increases your streak.")
         print("A wrong guess resets your streak to 0.")

@@ -2,30 +2,107 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+import config
+from web_utils.web_crawler import REQUEST_HEADERS
+
 
 def scrape_page(url: str) -> str:
     """
-    Fetch a webpage and extract visible text.
+    Extract the main textual content from a webpage.
 
     Args:
-        url (str): Webpage URL.
+        url: URL of the webpage to scrape.
 
     Returns:
-        str: Cleaned visible text content.
+        Cleaned textual content.
     """
 
-    response = requests.get(url, timeout=10)
+    response = requests.get(
+        url,
+        timeout=10,
+        headers=REQUEST_HEADERS
+    )
     response.raise_for_status()
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    if config.SCRAPER_DEBUGGER:
+        print(f"Scraping: {url}")
+        print(f"Status: {response.status_code}")
+        print(f"HTML length: {len(response.text)}")
 
-    # Remove scripts/styles
-    for tag in soup(["script", "style", "noscript"]):
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
+
+    # Remove elements that are not useful article content.
+    for tag in soup([
+        "script",
+        "style",
+        "noscript",
+        "nav",
+        "footer",
+        "header",
+        "aside",
+        "form"
+    ]):
         tag.decompose()
 
-    text = soup.get_text(separator=" ")
+    # Find the main article.
+    content = soup.find("article")
 
-    # Clean whitespace
-    text = re.sub(r"\s+", " ", text).strip()
+    if content is None:
+        content = soup.find("main")
+
+    if content is None:
+        content = soup.body
+
+    if content is None:
+        return ""
+
+    if config.SCRAPER_DEBUGGER:
+        print(f"Content tag: {content.name}")
+        print(f"Content id: {content.get('id')}")
+        print(f"Content classes: {content.get('class')}")
+
+    # Remove interactive elements.
+    for tag in content.find_all(
+        ["button", "input", "select", "textarea"]
+    ):
+        tag.decompose()
+
+    # Extract paragraphs only.
+    text_parts = []
+
+    for paragraph in content.find_all("p"):
+        text = paragraph.get_text(
+            separator=" ",
+            strip=True
+        )
+
+        if text:
+            text_parts.append(text)
+
+    # Put each paragraph on its own line.
+    text = "\n".join(text_parts)
+
+    # Remove visual separators.
+    text = text.replace("|", " ")
+
+    # Normalize whitespace.
+    text = re.sub(
+        r"[ \t]+",
+        " ",
+        text
+    )
+
+    # Remove excessive blank lines.
+    text = re.sub(
+        r"\n\s*\n+",
+        "\n\n",
+        text
+    ).strip()
+
+    if config.SCRAPER_DEBUGGER:
+        print(f"Extracted text length: {len(text)}")
 
     return text
