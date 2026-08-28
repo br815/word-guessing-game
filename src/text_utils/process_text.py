@@ -4,6 +4,7 @@ import collections
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
 from nltk import pos_tag
 
 # GLOBALS:
@@ -56,6 +57,11 @@ def is_valid_token(tok):
     if "'" in tok or "’" in tok:
         if config.PROCESS_TEXT_DEBUGGER or config.DEBUG_ALL:
             print(f"***Token \"{tok}\" failed filtration check due to: IS CONTRACTION***")
+        return False
+    # Token must be English (ie. findable in WordNet's synsets).
+    if not wordnet.synsets(tok):
+        if config.PROCESS_TEXT_DEBUGGER or config.DEBUG_ALL:
+                    print(f"***Token \"{tok}\" failed filtration check due to: IS NOT ENGLISH***")
         return False
     # Token must not be a stopword.
     if tok in STOPWORDS_SET:

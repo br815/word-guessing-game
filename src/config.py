@@ -22,10 +22,10 @@ HINT_CHAR = '?'
 ### CODE DEBUGGERS
 # Project-wide debugger to trigger all debug statements.
 DEBUG_ALL = False
-# Boolean specifically for web_scraper.py to print its debug statements if desired.
-WEB_SCRAPER_DEBUGGER = True
 # Boolean specifically for web_crawler.py to print its debug statements if desired.
 WEB_CRAWLER_DEBUGGER = True
+# Boolean specifically for web_scraper.py to print its debug statements if desired.
+WEB_SCRAPER_DEBUGGER = True
 # Boolean specifically for generate_texts.py to print its debug statements if desired.
 GENERATE_TEXTS_DEBUGGER = True
 # Boolean specifically for process_file.py to print its debug statements if desired.
@@ -33,11 +33,11 @@ PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = False
+GAME_DEBUGGER = True
 # Two booleans specifically for main.py to print its debug statements if desired:
-MAIN_DEBUGGER_TEST_LIST = True
+MAIN_DEBUGGER_TEST_LIST = False
 # the one above for the hard-coded test list, and one below for the user-selected word list.
-MAIN_DEBUGGER_WORD_LIST = False
+MAIN_DEBUGGER_WORD_LIST = True
 
 
 
@@ -72,4 +72,19 @@ POS_DICT = {
     # Adverbs:
     "RBR": wordnet.ADV,
     "RBS": wordnet.ADV
+}
+
+
+MAX_PAGES = 3
+REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/151.0.0.0 Safari/537.36"
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;"
+        "q=0.9,image/avif,image/webp,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
 }

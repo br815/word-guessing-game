@@ -5,7 +5,7 @@ from game.statistics import Statistics
 from game.word_guessing_game import WordGuessingGame
 from text_utils.process_file import process_file
 from text_utils.process_text import process_text
-from web_utils.text_file_generator import generate_text_file
+from web_utils.generate_texts import generate_text_file
 
 
 
@@ -106,9 +106,9 @@ def run_crawler():
 
         page_count = int(page_count)
 
-        if page_count < 1:
+        if page_count < 1 or page_count > config.MAX_PAGES:
             print(
-                "ERROR: Number of webpages must be at least 1."
+                f"ERROR: Number of webpages must be at least 1 and no more than {config.MAX_PAGES}."
             )
             continue
 

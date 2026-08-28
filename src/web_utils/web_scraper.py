@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 
 import config
-from web_utils.web_crawler import REQUEST_HEADERS
 
 
 def scrape_page(url: str) -> str:
@@ -20,11 +19,11 @@ def scrape_page(url: str) -> str:
     response = requests.get(
         url,
         timeout=10,
-        headers=REQUEST_HEADERS
+        headers=config.REQUEST_HEADERS
     )
     response.raise_for_status()
 
-    if config.SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER:
         print(f"Scraping: {url}")
         print(f"Status: {response.status_code}")
         print(f"HTML length: {len(response.text)}")
@@ -59,7 +58,7 @@ def scrape_page(url: str) -> str:
     if content is None:
         return ""
 
-    if config.SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER:
         print(f"Content tag: {content.name}")
         print(f"Content id: {content.get('id')}")
         print(f"Content classes: {content.get('class')}")
@@ -102,7 +101,7 @@ def scrape_page(url: str) -> str:
         text
     ).strip()
 
-    if config.SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER:
         print(f"Extracted text length: {len(text)}")
 
     return text

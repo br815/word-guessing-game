@@ -5,19 +5,6 @@ from urllib.parse import urljoin, urlparse
 import config
 
 
-REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/151.0.0.0 Safari/537.36"
-    ),
-    "Accept": (
-        "text/html,application/xhtml+xml,application/xml;"
-        "q=0.9,image/avif,image/webp,*/*;q=0.8"
-    ),
-    "Accept-Language": "en-US,en;q=0.9",
-}
-
 
 def normalize_url(url: str) -> str:
     """
@@ -170,7 +157,7 @@ def get_candidate_urls(
 
 def crawl(
     seed_url: str,
-    max_pages: int = 5
+    max_pages: int = config.MAX_PAGES
 ) -> list[str]:
     """
     Crawl webpages beginning at seed_url.
@@ -194,11 +181,6 @@ def crawl(
     Returns:
         List of collected webpage URLs.
     """
-
-    if max_pages < 1:
-        raise ValueError(
-            "ERROR: Number of webpages must be at least 1."
-        )
 
     # Normalize the starting URL.
     seed_url = normalize_url(
@@ -237,14 +219,14 @@ def crawl(
             response = requests.get(
                 url,
                 timeout=10,
-                headers=REQUEST_HEADERS
+                headers=config.REQUEST_HEADERS
             )
 
             response.raise_for_status()
 
         except requests.RequestException as err_msg:
 
-            if config.CRAWLER_DEBUGGER:
+            if config.WEB_CRAWLER_DEBUGGER:
                 print(
                     f"ERROR: Could not crawl "
                     f"{url}: {err_msg}"
@@ -256,7 +238,7 @@ def crawl(
         visited.add(url)
         collected.append(url)
 
-        if config.CRAWLER_DEBUGGER:
+        if config.WEB_CRAWLER_DEBUGGER:
             print(
                 f"Crawled: {url}"
             )
@@ -273,7 +255,7 @@ def crawl(
         )
 
         if content is None:
-            if config.CRAWLER_DEBUGGER:
+            if config.WEB_CRAWLER_DEBUGGER:
                 print(
                     f"WARNING: No main content found: "
                     f"{url}"
@@ -316,7 +298,7 @@ def crawl(
                 candidate_url
             )
 
-    if config.CRAWLER_DEBUGGER:
+    if config.WEB_CRAWLER_DEBUGGER:
         print(
             f"URLs collected: "
             f"{len(collected)}"
