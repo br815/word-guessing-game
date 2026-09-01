@@ -23,7 +23,7 @@ def scrape_page(url: str) -> str:
     )
     response.raise_for_status()
 
-    if config.WEB_SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
         print(f"Scraping: {url}")
         print(f"Status: {response.status_code}")
         print(f"HTML length: {len(response.text)}")
@@ -58,7 +58,7 @@ def scrape_page(url: str) -> str:
     if content is None:
         return ""
 
-    if config.WEB_SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
         print(f"Content tag: {content.name}")
         print(f"Content id: {content.get('id')}")
         print(f"Content classes: {content.get('class')}")
@@ -101,7 +101,7 @@ def scrape_page(url: str) -> str:
         text
     ).strip()
 
-    if config.WEB_SCRAPER_DEBUGGER:
+    if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
         print(f"Extracted text length: {len(text)}")
 
     return text

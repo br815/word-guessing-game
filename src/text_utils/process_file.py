@@ -26,9 +26,6 @@ def select_file_from_dir(dir_name):
 
     # First make sure that the list contains any files to begin with.
     if len(files) == 0:
-        ###print(f"ERROR: Folder \"{dir_name}\" contains no files.")
-        ###return None
-        # ^Instead of returning None (which results in an infinite loop in main()), raise an exception.
         raise FileNotFoundError(f"ERROR: Folder \"{dir_name}\" contains no files.")
 
     # User input validation loop.
@@ -72,19 +69,19 @@ def read_from_selected_file(input_file):
                         It is called by process_file().
 	Param:              input_file
                         Relative path to an input file.
-	Return:             input_file_text
-					    String for the contents of the input file.
+	Return:             raw_text
+					    String for the raw contents of the input file.
     """
     # Read selected file.
     with open(input_file, "r", encoding="utf-8") as f:
-        input_file_text = f.read()
+        raw_text = f.read()
 
     # Ensure that the file contains text (ie. doesn't contain only whitespace).
-    if input_file_text.strip() == "":
+    if raw_text.strip() == "":
         print(f"ERROR: File \"{input_file.name}\" contains no text.")
         return None
     
-    return input_file_text
+    return raw_text
 # End of read_from_selected_file()
 
 
@@ -103,10 +100,10 @@ def process_file(dir_name):
     """
     selected_file = select_file_from_dir(dir_name)
 
-    selected_file_text = read_from_selected_file(selected_file)
+    raw_text = read_from_selected_file(selected_file)
 
     if config.PROCESS_FILE_DEBUGGER or config.DEBUG_ALL:
-        print(f"***INPUT_FILE_TEXT FROM PROCESS_FILE() IS:***\n\"{selected_file_text}\"")
+        print(f"***INPUT_FILE_TEXT FROM PROCESS_FILE() IS:***\n\"{raw_text}\"")
     
-    return selected_file.name, selected_file_text
+    return selected_file.name, raw_text
 # End of process_file()

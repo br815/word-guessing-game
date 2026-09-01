@@ -1,8 +1,7 @@
+import config
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
-
-import config
 
 
 
@@ -16,15 +15,12 @@ def normalize_url(url: str) -> str:
 
     parsed = urlparse(url)
 
-    return parsed._replace(
-        fragment=""
-    ).geturl()
+    return parsed._replace(fragment="").geturl()
+# End of normalize_url()
 
 
-def is_valid_url(
-    url: str,
-    domain: str
-) -> bool:
+
+def is_valid_url(url: str, domain: str) -> bool:
     """
     Determine whether a URL can be crawled.
 
@@ -65,11 +61,9 @@ def is_valid_url(
         ".xlsx",
     )
 
-    if parsed.path.lower().endswith(
-        excluded_extensions
-    ):
+    if parsed.path.lower().endswith(excluded_extensions):
         return False
-
+    
     return True
 
 
@@ -157,7 +151,7 @@ def get_candidate_urls(
 
 def crawl(
     seed_url: str,
-    max_pages: int = config.MAX_PAGES
+    max_webpages: int = config.MAX_WEBPAGES
 ) -> list[str]:
     """
     Crawl webpages beginning at seed_url.
@@ -168,13 +162,13 @@ def crawl(
     - follows links found in main page content
     - considers links in document order
     - avoids duplicate URLs
-    - counts the seed as one of max_pages
+    - counts the seed as one of max_webpages
 
     Args:
         seed_url:
             Starting webpage.
 
-        max_pages:
+        max_webpages:
             Maximum total number of webpages to collect,
             including the seed URL.
 
@@ -205,7 +199,7 @@ def crawl(
 
     while (
         to_visit
-        and len(collected) < max_pages
+        and len(collected) < max_webpages
     ):
 
         # FIFO queue:
@@ -226,7 +220,7 @@ def crawl(
 
         except requests.RequestException as err_msg:
 
-            if config.WEB_CRAWLER_DEBUGGER:
+            if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
                 print(
                     f"ERROR: Could not crawl "
                     f"{url}: {err_msg}"
@@ -238,7 +232,7 @@ def crawl(
         visited.add(url)
         collected.append(url)
 
-        if config.WEB_CRAWLER_DEBUGGER:
+        if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
             print(
                 f"Crawled: {url}"
             )
@@ -255,7 +249,7 @@ def crawl(
         )
 
         if content is None:
-            if config.WEB_CRAWLER_DEBUGGER:
+            if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
                 print(
                     f"WARNING: No main content found: "
                     f"{url}"
@@ -286,7 +280,7 @@ def crawl(
             # requested maximum.
             if (
                 len(collected) + len(to_visit)
-                >= max_pages
+                >= max_webpages
             ):
                 break
 
@@ -298,7 +292,7 @@ def crawl(
                 candidate_url
             )
 
-    if config.WEB_CRAWLER_DEBUGGER:
+    if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
         print(
             f"URLs collected: "
             f"{len(collected)}"

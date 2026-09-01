@@ -1,5 +1,5 @@
-import sys
 import config
+import sys
 from game.rulesets import RULESETS
 from game.statistics import Statistics
 from game.word_guessing_game import WordGuessingGame
@@ -15,15 +15,15 @@ def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
         # Try-except block is necessary in case the provided directory does not exist (see select_file_from_dir() in process_file.py).
         try:
             while True:
-                # Attempt to get valid input text from file.
-                input_file_name, input_file_text = process_file(dir_with_texts)
+                # Attempt to get valid raw text from input file.
+                raw_text_file_name, raw_text = process_file(dir_with_texts)
 
                 # If file processing failed, return to main().
-                if input_file_text is None:
+                if raw_text is None:
                     return None
 
-                # Attempt to process input text.
-                word_list = process_text(input_file_name, input_file_text)
+                # Attempt to process raw text.
+                word_list = process_text(raw_text_file_name, raw_text)
 
                 # If text processing failed, return to main().
                 if word_list is None:
@@ -79,8 +79,32 @@ def load_ruleset():
 
 
 
-def run_game(word_list, ruleset, this_session):
-    # Instantiate a WordGuessingGame object on the given word list.
+def run_game(this_session: Statistics):
+    # Load word list.
+    if config.MAIN_TEST_LIST_DEBUGGER or config.DEBUG_ALL:
+        word_list = load_word_list(this_session.words_played, word_list=config.TEST_LIST)
+        print("***LIST OF TEST WORDS FROM MAIN():***")
+        print(word_list)
+    else:
+        word_list = load_word_list(this_session.words_played, dir_with_texts=config.TEXTS)
+        if config.MAIN_WORD_LIST_DEBUGGER or config.DEBUG_ALL:
+            print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
+            print(word_list)
+
+    # "None" means: the input file itself contained only invalid words (ie. it could not produce a valid word list):
+    if word_list is None:
+        return
+    # "not" means: the input file contained valid words, but its word list is empty (ie. every word in it has already been played this session):
+    if not word_list:
+        print("Congratulations! You have played every word available in this word list.")
+        return
+
+    # Load ruleset.
+    ruleset = load_ruleset()
+    if config.MAIN_TEST_LIST_DEBUGGER or config.MAIN_WORD_LIST_DEBUGGER or config.DEBUG_ALL:
+        print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
+
+    # Instantiate a WordGuessingGame object on the given word list and ruleset.
     this_game = WordGuessingGame(word_list, ruleset)
     # Call the actual function to play the game, then store its results (return format is dict).
     game_results = this_game.play_game()
@@ -93,48 +117,44 @@ def run_game(word_list, ruleset, this_session):
 def run_crawler():
     seed_url = input("Enter starting URL: ").strip()
 
+    # User input validation loop.
     while True:
-        page_count = input(
-            "How many webpages should be collected? "
-        ).strip()
+        webpage_count = input(f"Enter a number of webpages to collect (maximum {config.MAX_WEBPAGES}): ").strip()
 
-        if not page_count.isdigit():
-            print(
-                "ERROR: Number of webpages must be a positive integer."
-            )
+        # Case 1: input is not int only.
+        if not webpage_count.isdigit():
+            print("ERROR: Input must be within valid range and contain no other characters.")
             continue
 
-        page_count = int(page_count)
+        # If this point has been reached, input must be an int and can be cast as such.
+        webpage_count = int(webpage_count)
 
-        if page_count < 1 or page_count > config.MAX_PAGES:
-            print(
-                f"ERROR: Number of webpages must be at least 1 and no more than {config.MAX_PAGES}."
-            )
+        # Case 2: int is out of range.
+        if webpage_count < 1 or webpage_count > config.MAX_WEBPAGES:
+            print(f"ERROR: {webpage_count} is outside valid range.")
             continue
 
+        # Valid input received.
         break
+    # End of user input validation loop
 
-    print("\nCrawling website... please wait.\n")
+    print("\nCrawling website...\n")
 
+    # Try-except block is necessary in case no webpages could be collected (see generate_text_file() in generate_texts.py).
     try:
-        file_path = generate_text_file(
-            seed_url,
-            page_count
-        )
+        file_path = generate_text_file(seed_url, webpage_count)
     except ValueError as err_msg:
         print(err_msg)
         return
 
-    print(
-        f"\nNew input file created: {file_path}"
-    )
+    print(f"\nNew input file created: {file_path}")
 # End of run_crawler()
 
 
 
 def main():
     # Instantiate a Statistics object to track & record the statistics of all games played during the current session.
-    this_session = Statistics()
+    this_session0 = Statistics()
 
     # Main menu loop.
     while True:
@@ -163,42 +183,16 @@ def main():
         # Option 1: run web crawler.
         if choice == 1:
             run_crawler()
-            #print("***RUN_CRAWLER DEBUG STMT!!!***")
             continue
 
         # Option 2: run word guessing game.
         if choice == 2:
-            # Load word list.
-            if config.MAIN_DEBUGGER_TEST_LIST or config.DEBUG_ALL:
-                word_list = load_word_list(this_session.words_played, word_list=config.TEST_LIST)
-                print("***LIST OF TEST WORDS FROM MAIN():***")
-                print(word_list)
-            else:
-                word_list = load_word_list(this_session.words_played, dir_with_texts=config.TEXTS)
-                if config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
-                    print("***LIST OF VALID INPUT FILE WORDS FROM MAIN():***")
-                    print(word_list)
-
-            # "None" means: the input file itself contained only invalid words (ie. it could not produce a valid word list):
-            if word_list is None:
-                continue
-            # "not" means: the input file contained valid words, but its word list is empty (ie. every word in it has already been played this session):
-            if not word_list:
-                print("Congratulations! You have played every word available in this word list.")
-                continue
-
-            # Load ruleset.
-            ruleset = load_ruleset()
-            if config.MAIN_DEBUGGER_TEST_LIST or config.MAIN_DEBUGGER_WORD_LIST or config.DEBUG_ALL:
-                print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
-
-            # Run game with given word list and ruleset.
-            run_game(word_list, ruleset, this_session)
+            run_game(this_session0)
             continue
     # End of main menu loop
 
     # Print the session's statistics report.
-    this_session.print_report()
+    this_session0.print_report()
     print("\nGoodbye.\n")
 # End of main()
 

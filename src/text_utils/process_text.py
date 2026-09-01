@@ -117,7 +117,7 @@ def process_text(raw_text_file_name, raw_text):
         if is_valid_token(tok.lower())] # Check lowercase tokens because stopwords list is in lowercase.
 
     # Edge case: if no tokens pass the checks, display error message.
-    if len(filtered_tokens) == 0:
+    if not filtered_tokens:
         print(f"ERROR: File \"{raw_text_file_name}\" contains no valid tokens.")
         return None
 
@@ -135,7 +135,7 @@ def process_text(raw_text_file_name, raw_text):
         if pos in config.POS_DICT]
 
     # Edge case: if no tokens pass the checks, display error message.
-    if len(filtered_pos) == 0:
+    if not filtered_pos:
         print(f"ERROR: File \"{raw_text_file_name}\" contains no valid parts of speech.")
         return None
     
@@ -168,7 +168,7 @@ def process_text(raw_text_file_name, raw_text):
         if count >= config.MIN_FREQ_VAL]
 
     # Edge case: if no lemma meets the min freq requirement, just allow words that occur at least once.
-    if len(frequent_lemmas) == 0:
+    if not frequent_lemmas:
         frequent_lemmas = [
             lemma 
             for lemma, count 
