@@ -18,7 +18,7 @@ LEMMATIZER = WordNetLemmatizer()
 
 
 
-def remove_accents(input_str):
+def remove_accents(input_str: str) -> str:
     """
     Helper Function 1:  remove_accents()
 	Descr:              This function replaces any accented characters in a text with unaccented characters.
@@ -43,7 +43,7 @@ def remove_accents(input_str):
 
 
 
-def is_valid_token(tok):
+def is_valid_token(tok: str) -> bool:
     """
     Helper Function 2:	is_valid_token()
 	Descr:              This function checks if a token passes a series of conditions.
@@ -80,7 +80,7 @@ def is_valid_token(tok):
 
 
 
-def process_text(raw_text_file_name, raw_text):
+def process_text(raw_text_file_name: str, raw_text: str) -> list[str] | None:
     """
     Function 3:         process_text()
 	Descr:              This function tokenizes, lemmatizes, and counts lemma frequencies of a given text.

@@ -1,6 +1,6 @@
 import config
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from urllib.parse import urljoin, urlparse
 
 
@@ -67,9 +67,7 @@ def is_valid_url(url: str, domain: str) -> bool:
     return True
 
 
-def get_page_content(
-    soup: BeautifulSoup
-):
+def get_page_content(soup: BeautifulSoup) -> Tag | None:
     """
     Locate the main content area of a webpage.
 
@@ -87,11 +85,7 @@ def get_page_content(
     return content
 
 
-def get_candidate_urls(
-    content,
-    current_url: str,
-    domain: str
-) -> list[str]:
+def get_candidate_urls(content: Tag, current_url: str, domain: str) -> list[str]:
     """
     Find eligible links inside paragraph text,
     in the order they appear.
@@ -149,10 +143,7 @@ def get_candidate_urls(
     return candidates
 
 
-def crawl(
-    seed_url: str,
-    max_webpages: int = config.MAX_WEBPAGES
-) -> list[str]:
+def crawl(seed_url: str, num_webpages: int) -> list[str]:
     """
     Crawl webpages beginning at seed_url.
 
@@ -199,7 +190,7 @@ def crawl(
 
     while (
         to_visit
-        and len(collected) < max_webpages
+        and len(collected) < num_webpages
     ):
 
         # FIFO queue:
@@ -280,7 +271,7 @@ def crawl(
             # requested maximum.
             if (
                 len(collected) + len(to_visit)
-                >= max_webpages
+                >= num_webpages
             ):
                 break
 

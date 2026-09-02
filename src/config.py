@@ -3,6 +3,8 @@ import pathlib
 # For POS_DICT.
 from nltk.corpus import wordnet
 
+
+
 ### CODE DEBUGGERS
 # Project-wide debugger to trigger all debug statements.
 DEBUG_ALL = False
@@ -17,9 +19,9 @@ PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = True
+GAME_DEBUGGER = False
 # Two booleans specifically for main.py to print its debug statements if desired:
-MAIN_TEST_LIST_DEBUGGER = True
+MAIN_TEST_LIST_DEBUGGER = False
 # the one above for the hard-coded test list, and one below for the user-selected word list.
 MAIN_WORD_LIST_DEBUGGER = False
 
@@ -35,7 +37,7 @@ TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
 
 
 
-### SPECIAL CHARS FOR GAME SETTINGS
+### SPECIAL CHARS FOR GAME MENU SETTINGS
 QUIT_CHAR = '!'
 HINT_CHAR = '?'
 
@@ -43,7 +45,7 @@ HINT_CHAR = '?'
 
 ### WEB CRAWLING SETTINGS
 # Max # of webpages the user can request.
-MAX_WEBPAGES = 3
+MAX_WEBPAGES = 5
 # HTTP request headers to communicate with server.
 REQUEST_HEADERS = {
     # Identify the client making the request.

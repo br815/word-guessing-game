@@ -1,6 +1,5 @@
 import config
-import sys
-from game.rulesets import RULESETS
+from game.rulesets import Ruleset, RULESETS
 from game.statistics import Statistics
 from game.word_guessing_game import WordGuessingGame
 from text_utils.process_file import process_file
@@ -9,23 +8,23 @@ from web_utils.generate_texts import generate_text_file
 
 
 
-def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
+def load_word_list(words_played_set: set[str], dir_with_texts: str | None = None, word_list: list[str] | None = None) -> list[str] | None:
     # If the test list has not been provided, generate a word list from a user-chosen input file.
     if word_list is None:
-        # Try-except block is necessary in case the provided directory does not exist (see select_file_from_dir() in process_file.py).
+        # Try-except block is necessary in case of potential file-handling errors (see select_file_from_dir() in process_file.py).
         try:
             while True:
                 # Attempt to get valid raw text from input file.
                 raw_text_file_name, raw_text = process_file(dir_with_texts)
 
-                # If file processing failed, return to main().
+                # If file processing failed, return to caller.
                 if raw_text is None:
                     return None
 
                 # Attempt to process raw text.
                 word_list = process_text(raw_text_file_name, raw_text)
 
-                # If text processing failed, return to main().
+                # If text processing failed, return to caller.
                 if word_list is None:
                     return None
 
@@ -34,7 +33,7 @@ def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
             # End of user input validation loop
         except FileNotFoundError as err_msg:
             print(err_msg)
-            sys.exit()
+            return
 
     # Filter out words that have already been played in this session (ie. across all chosen input files, or across all loads of the test list).
     word_list = [
@@ -47,7 +46,7 @@ def load_word_list(words_played_set, dir_with_texts=None, word_list=None):
 
 
 
-def load_ruleset():
+def load_ruleset() -> Ruleset:
     # Before starting the game loop, user selects a game mode based on ruleset.
     while True:
         # Display modes with numbers & parantheses: 1), 2), ... etc.
@@ -79,7 +78,7 @@ def load_ruleset():
 
 
 
-def run_game(this_session: Statistics):
+def run_game(this_session: Statistics) -> None:
     # Load word list.
     if config.MAIN_TEST_LIST_DEBUGGER or config.DEBUG_ALL:
         word_list = load_word_list(this_session.words_played, word_list=config.TEST_LIST)
@@ -114,20 +113,20 @@ def run_game(this_session: Statistics):
 
 
 
-def run_crawler():
+def run_crawler() -> None:
     seed_url = input("Enter starting URL: ").strip()
 
     # User input validation loop.
     while True:
-        webpage_count = input(f"Enter a number of webpages to collect (maximum {config.MAX_WEBPAGES}): ").strip()
+        user_input = input(f"Enter a number of webpages to collect (maximum {config.MAX_WEBPAGES}): ").strip()
 
         # Case 1: input is not int only.
-        if not webpage_count.isdigit():
+        if not user_input.isdigit():
             print("ERROR: Input must be within valid range and contain no other characters.")
             continue
 
         # If this point has been reached, input must be an int and can be cast as such.
-        webpage_count = int(webpage_count)
+        webpage_count = int(user_input)
 
         # Case 2: int is out of range.
         if webpage_count < 1 or webpage_count > config.MAX_WEBPAGES:
@@ -147,21 +146,21 @@ def run_crawler():
         print(err_msg)
         return
 
-    print(f"\nNew input file created: {file_path}")
+    print(f"\nNew text file created: {file_path}")
 # End of run_crawler()
 
 
 
-def main():
+def main() -> None:
     # Instantiate a Statistics object to track & record the statistics of all games played during the current session.
-    this_session0 = Statistics()
+    this_session = Statistics()
 
     # Main menu loop.
     while True:
         # ...
-        print(f"\nMAIN MENU\n1) Generate Input File (crawl web)\n2) Play Word Guessing Game\n{config.QUIT_CHAR}) Quit")
+        print(f"\nMAIN MENU\n1) Generate Input File (web crawler)\n2) Play Word Guessing Game\n{config.QUIT_CHAR}) Quit")
         
-        user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit. ").strip()
+        user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit: ").strip()
 
         if user_input == config.QUIT_CHAR:
             break
@@ -172,27 +171,27 @@ def main():
             continue
 
         # If this point has been reached, input must be an int and can be cast as such.
-        choice = int(user_input)
+        menu_option = int(user_input)
 
         # Case 2: int is out of range.
-        if choice < 1 or choice > 2:
-            print(f"ERROR: {choice} is outside valid range.")
+        if menu_option < 1 or menu_option > 2:
+            print(f"ERROR: {menu_option} is outside valid range.")
             continue
         # Valid input received.
 
         # Option 1: run web crawler.
-        if choice == 1:
+        if menu_option == 1:
             run_crawler()
             continue
 
         # Option 2: run word guessing game.
-        if choice == 2:
-            run_game(this_session0)
+        if menu_option == 2:
+            run_game(this_session)
             continue
     # End of main menu loop
 
     # Print the session's statistics report.
-    this_session0.print_report()
+    this_session.print_report()
     print("\nGoodbye.\n")
 # End of main()
 

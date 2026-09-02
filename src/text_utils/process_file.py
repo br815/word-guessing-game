@@ -3,7 +3,7 @@ import pathlib
 
 
 
-def select_file_from_dir(dir_name):
+def select_file_from_dir(dir_name: str) -> pathlib.Path:
     """
     Helper Function 1:	select_file_from_dir()
 	Descr:              This function lists the files in a given directory and prompts the user to select one.
@@ -16,6 +16,10 @@ def select_file_from_dir(dir_name):
     """
     # Build path to target directory.
     dir = pathlib.Path(dir_name)
+
+    # First make sure the directory even exists and is findable.
+    if not dir.is_dir():
+        raise FileNotFoundError(f"ERROR: Folder \"{dir_name}\" could not be found.")
 
     # List comprehension to get all files in the target directory.
     files = [
@@ -43,11 +47,11 @@ def select_file_from_dir(dir_name):
             continue
 
         # If this point has been reached, input must be an int and can be cast as such.
-        choice = int(user_input)
+        selected_num = int(user_input)
 
         # Case 2: int is out of range.
-        if choice < 1 or choice > len(files):
-            print(f"ERROR: {choice} is outside valid range.")
+        if selected_num < 1 or selected_num > len(files):
+            print(f"ERROR: {selected_num} is outside valid range.")
             continue
 
         # Valid input received.
@@ -55,14 +59,14 @@ def select_file_from_dir(dir_name):
     # End of user input validation loop
 
     # Choose user-specified file.
-    selected_file = files[choice-1]
+    selected_file = files[selected_num-1]
 
     return selected_file
 # End of select_file_from_dir()
 
 
 
-def read_from_selected_file(input_file):
+def read_from_selected_file(input_file: pathlib.Path) -> str | None:
     """
     Helper Function 2:  read_from_selected_file()
 	Descr:              This function opens a given input file, reads it, and returns its contents.
@@ -86,7 +90,7 @@ def read_from_selected_file(input_file):
 
 
 
-def process_file(dir_name):
+def process_file(dir_name: str) -> tuple[str, str | None]:
     """
     Function 3:         process_file()
 	Descr:              This function calls the helper functions to 

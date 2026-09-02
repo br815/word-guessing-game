@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 
 
-class RuleSet(ABC):
+class Ruleset(ABC):
     """
     Abstract base class for all game rule systems.
     """
@@ -42,7 +42,7 @@ class RuleSet(ABC):
 
 
 
-class PointsRuleSet(RuleSet):
+class PointsRuleset(Ruleset):
     """
     Original scoring system.
 
@@ -86,7 +86,7 @@ class PointsRuleSet(RuleSet):
 
 
 
-class LivesRuleSet(RuleSet):
+class LivesRuleset(Ruleset):
     """
     Hangman-style mode.
 
@@ -131,7 +131,7 @@ class LivesRuleSet(RuleSet):
 
 
 
-class CountdownRuleSet(RuleSet):
+class CountdownRuleset(Ruleset):
     """
     Countdown mode.
 
@@ -170,7 +170,7 @@ class CountdownRuleSet(RuleSet):
 
 
 
-class StreakRuleSet(RuleSet):
+class StreakRuleset(Ruleset):
     """
     Simple streak mode.
 
@@ -213,10 +213,9 @@ class StreakRuleSet(RuleSet):
 
 
 
-RULESETS = {"1": ("Points Mode", PointsRuleSet),
-            "2": ("Lives Mode", LivesRuleSet),
-            "3": ("Countdown Mode", CountdownRuleSet),
-            "4": ("Streak Mode", StreakRuleSet)
-
+RULESETS = {"1": ("Points Mode", PointsRuleset),
+            "2": ("Lives Mode", LivesRuleset),
+            "3": ("Countdown Mode", CountdownRuleset),
+            "4": ("Streak Mode", StreakRuleset)
             # Remember to add new rulesets here (don't forget the preceding comma!)
             }

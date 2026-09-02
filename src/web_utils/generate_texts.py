@@ -9,9 +9,7 @@ from web_utils.web_crawler import crawl
 from web_utils.web_scraper import scrape_page
 
 
-def get_filename_from_url(
-    url: str
-) -> str:
+def get_filename_from_url(url: str) -> str:
     """
     Create a filename from a webpage URL.
 
@@ -89,17 +87,13 @@ def get_filename_from_url(
     )
 
 
-def generate_text_file(
-    seed_url: str,
-    max_pages: int = 3,
-    output_dir=config.TEXTS
-):
+def generate_text_file(seed_url: str, num_webpages: int, output_dir=config.TEXTS) -> str:
     """
     Crawl and scrape webpages and save their text to an input file.
 
     Args:
         seed_url: Starting webpage supplied by the user.
-        max_pages: Maximum number of webpages to collect.
+        max_webpages: Maximum number of webpages to collect.
         output_dir: Directory in which to create the input file.
 
     Returns:
@@ -111,7 +105,7 @@ def generate_text_file(
 
     urls = crawl(
         seed_url,
-        max_pages
+        num_webpages
     )
 
     if not urls:
