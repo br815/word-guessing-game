@@ -2,6 +2,8 @@
 import pathlib
 # For POS_DICT.
 from nltk.corpus import wordnet
+# For GameResults.
+from typing import TypedDict
 
 
 
@@ -19,9 +21,9 @@ PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = False
+GAME_DEBUGGER = True
 # Two booleans specifically for main.py to print its debug statements if desired:
-MAIN_TEST_LIST_DEBUGGER = False
+MAIN_TEST_LIST_DEBUGGER = True
 # the one above for the hard-coded test list, and one below for the user-selected word list.
 MAIN_WORD_LIST_DEBUGGER = False
 
@@ -29,42 +31,13 @@ MAIN_WORD_LIST_DEBUGGER = False
 
 ### PATH TO REPO'S SUB-DIRECTORY CONTAINING TXT INPUT FILES
 TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
-
-
-
 ### TEST LIST TO TEST WORD GUESSING GAME ON
 TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
-
-
-
 ### SPECIAL CHARS FOR GAME MENU SETTINGS
 QUIT_CHAR = '!'
 HINT_CHAR = '?'
-
-
-
-### WEB CRAWLING SETTINGS
-# Max # of webpages the user can request.
-MAX_WEBPAGES = 5
-# HTTP request headers to communicate with server.
-REQUEST_HEADERS = {
-    # Identify the client making the request.
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        "AppleWebKit/537.36 (KHTML, like Gecko)"
-        "Chrome/151.0.0.0 Safari/537.36"),
-    # Accept the following content formats.
-    "Accept": (
-        "text/html,"
-        "application/xhtml+xml,"
-        "application/xml;"
-        "q=0.9,image/avif,"
-        "image/webp,"
-        "*/*;"
-        "q=0.8"),
-    # Only accept US English & general English.
-    "Accept-Language": "en-US,en;q=0.9",
-}
+### WIDTH OF PRINTED BORDER BETWEEN PRINTED ITEMS IN GAME LOOP AND GAME SUMMARY
+BORDER_LEN = 50
 
 
 
@@ -98,4 +71,40 @@ POS_DICT = {
     # ADVERBS:
     "RBR": wordnet.ADV,
     "RBS": wordnet.ADV
+}
+
+
+
+# TypedDict type hint for the return type of play_game() in word_guessing_game.py that is also the parameter of record_game() in statistics.py.
+class GameResults(TypedDict):
+    mode: str
+    word: str
+    result: str
+    score: int
+    guesses: int
+    completion: float
+
+
+
+### WEB CRAWLING SETTINGS
+# Max # of webpages the user can request.
+MAX_WEBPAGES = 5
+# HTTP request headers to communicate with server.
+REQUEST_HEADERS = {
+    # Identify the client making the request.
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        "AppleWebKit/537.36 (KHTML, like Gecko)"
+        "Chrome/151.0.0.0 Safari/537.36"),
+    # Accept the following content formats.
+    "Accept": (
+        "text/html,"
+        "application/xhtml+xml,"
+        "application/xml;"
+        "q=0.9,image/avif,"
+        "image/webp,"
+        "*/*;"
+        "q=0.8"),
+    # Only accept US English & general English.
+    "Accept-Language": "en-US,en;q=0.9",
 }

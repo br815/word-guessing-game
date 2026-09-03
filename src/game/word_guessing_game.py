@@ -1,6 +1,7 @@
 import config
 import random
 import re
+from game.rulesets import Ruleset
 
 
 
@@ -11,22 +12,19 @@ class WordGuessingGame:
                         It contains 7 attributes and 13 methods.
                         It is instantiated in main().
     """
-    def __init__(self, word_list, ruleset):
-        """
-        
-        """
-        self.word_list = word_list      # List of potential words to be picked for a game
-        self.ruleset = ruleset          # User-specified ruleset that defines the rules of the game
+    def __init__(self, word_list: list[str], ruleset: Ruleset) -> None:
+        self.word_list: list[str] = word_list   # List of potential words to be picked for a game
+        self.ruleset: Ruleset = ruleset         # User-specified ruleset that defines the rules of the game
 
-        self.word = None                # The word picked for the current game
-        self.display = None             # The displayed (incompleted or completed) word
-        self.value = None               # The user's score being tracked
-        self.guesses = []               # List of guesses the user has inputted so far (counts only hints & valid input, not repeat guesses or invalid input)
-        self.hints_remaining = None     # Number of hints the player can use up
+        self.word: str = ""                     # The word picked for the current game
+        self.display: list[str] = []            # The displayed (incompleted or completed) word
+        self.value: int | None = None           # The user's score being tracked
+        self.guesses: list[str] = []            # List of guesses the user has inputted so far (counts only hints & valid input, not repeat guesses or invalid input)
+        self.hints_remaining: int = -1          # Number of hints the player can use up
 
 
 
-    def choose_word(self):
+    def choose_word(self) -> None:
         """
         Function 1:	        choose_word()
 	    Descr:              This function ...
@@ -57,10 +55,9 @@ class WordGuessingGame:
 
 
 
-    def display_game_state(self):
+    def display_game_state(self) -> None:
         # Print a header to clearly separate this iteration of the display from the printout of the previous result.
-        #print(f"\n{len(self.word) * 2 * "="}\n")   # This header is the length of the word itself.
-        print(f"\n{24 * "="}\n")                    # This header matches the length of the rules header in the Rulesets class.
+        print(f"{config.BORDER_LEN * "="}\n")
 
         # Display the word in whatever incompleted or completed state it's in, with spaces between every element of the list.
         print(' '.join(self.display))
@@ -83,7 +80,7 @@ class WordGuessingGame:
 
 
 
-    def get_valid_guess(self):
+    def get_valid_guess(self) -> str:
         # Continue looping until the player inputs a valid guess.
         while True:
             guess = input("Guess a letter: ").lower()
@@ -105,7 +102,7 @@ class WordGuessingGame:
 
 
 
-    def apply_guess(self, guess):
+    def apply_guess(self, guess: str) -> int:
         # The number of times a letter may appear in the word.
         occurrences = 0
 
@@ -121,7 +118,7 @@ class WordGuessingGame:
 
 
 
-    def print_guess_result(self, guess_is_correct, occurrences, guess):
+    def print_guess_result(self, guess_is_correct: bool, occurrences: int, guess: str) -> None:
         if guess_is_correct:
             plural = ""
             if occurrences > 1:
@@ -136,7 +133,7 @@ class WordGuessingGame:
 
 
 
-    def calculate_hints(self):
+    def calculate_hints(self) -> int:
         # The number of hints the player deserves is calculated based on the length of the word.
         word_length = len(self.word)
 
@@ -151,7 +148,7 @@ class WordGuessingGame:
 
 
 
-    def get_hint_letter(self):
+    def get_hint_letter(self) -> str:
         # Set comprehension to remove multiple occurrences from the list of hidden letters, so all have an equal chance to be returned.
         available_letters = {
             self.word[i]
@@ -166,7 +163,7 @@ class WordGuessingGame:
 
 
 
-    def use_hint(self):
+    def use_hint(self) -> None:
         # First, check that there are even any hints remaining; if not, print an error message and leave the function.
         if self.hints_remaining == 0:
             print("ERROR: No hints remaining.")
@@ -191,7 +188,7 @@ class WordGuessingGame:
 
 
 
-    def completion_percent_all(self):
+    def completion_percent_all(self) -> float:
         # List comprehension to calculate percentage of ALL letters revealed, which even includes multiple occurrences.
         # Is a more player-intuitive statistic because it accounts for every individual character the player sees on their display,
         # ie. multiple occurrences of correct letters that occur multiple times
@@ -211,7 +208,7 @@ class WordGuessingGame:
 
 
     # Unused completion calculation function. If desired, change calculated completion statistic to call this function instead.
-    def completion_percent_unique(self):
+    def completion_percent_unique(self) -> float:
         # List comprehension to calculate percentage of UNIQUE letters revealed,
         # so that player completion only considers the single letters they inputted
         # and is not artificially inflated if those letters occurred more than once.
@@ -226,7 +223,7 @@ class WordGuessingGame:
 
 
 
-    def get_result(self):
+    def get_result(self) -> str | None:
         # Checks win as no underscores in display, ie. full word is displayed.
         # The same check can be done using ''.join(self.display) == self.word: ie. display with spaces removed matches the full word.
         if '_' not in self.display:
@@ -238,7 +235,7 @@ class WordGuessingGame:
 
 
 
-    def play_game(self):
+    def play_game(self) -> config.GameResults:
         # 1st: Set up the game.
         # Randomly select a word from the wordlist supplied to the object.
         self.choose_word()

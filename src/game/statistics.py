@@ -1,29 +1,33 @@
+import config
+
+
+
 class Statistics:
-    def __init__(self):
+    def __init__(self) -> None:
         # Overall session statistics.
-        self.words_played = set()
-        self.games_played = 0
+        self.words_played: set[str] = set()
+        self.games_played: int = 0
 
-        self.wins = 0
-        self.losses = 0
-        self.quits = 0
+        self.wins: int = 0
+        self.losses: int = 0
+        self.quits: int = 0
 
-        self.total_guesses = 0
+        self.total_guesses: int = 0
 
-        self.fewest_guesses = None
-        self.most_guesses = None
+        self.fewest_guesses: int | None = None
+        self.most_guesses: int | None = None
 
-        self.total_completion = 0.0
+        self.total_completion: float = 0.0
 
-        self.best_completion = None
-        self.worst_completion = None
+        self.best_completion: float | None = None
+        self.worst_completion: float | None = None
 
         # Statistics that are specific to each game mode.
-        self.mode_stats = {}
+        self.mode_stats: dict = {}
 
 
 
-    def record_game(self, game_results):
+    def record_game(self, game_results: config.GameResults) -> None:
         mode = game_results["mode"]
         word = game_results["word"]
         self.words_played.add(word)
@@ -96,18 +100,18 @@ class Statistics:
 
 
     # Helper print function used to print words in final report.
-    def print_word_list(self, label, words, width=50):
+    def print_words_won_or_lost(self, label: str, words_won_or_lost: list[str]) -> None:
         # Only print either list of words won or lost if any words actually WERE won or lost.
-        if not words:
+        if not words_won_or_lost:
             return
 
         prefix = f"{label:<30}"
         current_line = prefix
 
-        for index, word in enumerate(words):
+        for index, word in enumerate(words_won_or_lost):
 
             # Add a comma if this is not the final word in the list.
-            if index < len(words) - 1:
+            if index < len(words_won_or_lost) - 1:
                 word += ","
 
             if current_line == prefix:
@@ -115,7 +119,7 @@ class Statistics:
             else:
                 proposed_line = current_line + " " + word
 
-            if len(proposed_line) > width:
+            if len(proposed_line) > config.BORDER_LEN:
                 print(current_line)
                 current_line = " " * len(prefix) + word
             else:
@@ -125,7 +129,7 @@ class Statistics:
 
 
 
-    def print_report(self):
+    def print_report(self) -> None:
         if self.games_played == 0:
             print("No games played.")
             return
@@ -146,9 +150,9 @@ class Statistics:
         ) * 100
 
         print()
-        print("=" * 50)
+        print("=" * config.BORDER_LEN)
         print("SESSION SUMMARY")
-        print("=" * 50)
+        print("=" * config.BORDER_LEN)
 
         print(
             f"{'Games Played':<30}"
@@ -175,7 +179,7 @@ class Statistics:
             f"{win_rate:.2f}%"
         )
 
-        print("-" * 50)
+        print("-" * config.BORDER_LEN)
 
         print(
             f"{'Average Guesses':<30}"
@@ -192,7 +196,7 @@ class Statistics:
             f"{self.most_guesses}"
         )
 
-        print("-" * 50)
+        print("-" * config.BORDER_LEN)
 
         print(
             f"{'Average Completion':<30}"
@@ -209,9 +213,9 @@ class Statistics:
             f"{self.worst_completion:.2f}%"
         )
 
-        print("=" * 50)
+        print("=" * config.BORDER_LEN)
         print("PER-MODE SUMMARY")
-        print("=" * 50)
+        print("=" * config.BORDER_LEN)
 
         for index, (mode, mode_data) in enumerate(self.mode_stats.items()):
             avg_score = (mode_data["total_score"] / mode_data["games"])
@@ -222,11 +226,11 @@ class Statistics:
                 f"{'Games Played':<30}"
                 f"{mode_data['games']}")
 
-            self.print_word_list(
+            self.print_words_won_or_lost(
                 "Words Correctly Guessed",
                 mode_data["words_won"])
 
-            self.print_word_list(
+            self.print_words_won_or_lost(
                 "Words Failed to Guess",
                 mode_data["words_lost"])
 
@@ -244,7 +248,7 @@ class Statistics:
 
             # Print a separator between modes, or the end-of-report line after the final mode.
             if index < len(self.mode_stats) - 1:
-                print("-" * 50)
+                print("-" * config.BORDER_LEN)
             else:
-                print("=" * 50)
+                print("=" * config.BORDER_LEN)
 # End of Statistics class
