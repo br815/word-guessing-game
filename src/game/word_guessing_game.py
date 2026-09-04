@@ -2,6 +2,7 @@ import config
 import random
 import re
 from game.rulesets import Ruleset
+from game.data_types import GameResults
 
 
 
@@ -21,6 +22,7 @@ class WordGuessingGame:
         self.value: int | None = None           # The user's score being tracked
         self.guesses: list[str] = []            # List of guesses the user has inputted so far (counts only hints & valid input, not repeat guesses or invalid input)
         self.hints_remaining: int = -1          # Number of hints the player can use up
+    # End of init()
 
 
 
@@ -52,12 +54,15 @@ class WordGuessingGame:
         self.value = (self.ruleset.initial_value())
         # Initialize the list of guesses to an empty list.
         self.guesses = []
+    # End of choose_word()
 
 
 
     def display_game_state(self) -> None:
         # Print a header to clearly separate this iteration of the display from the printout of the previous result.
-        print(f"{config.BORDER_LEN * "="}\n")
+        print(f"{config.BORDER_LEN * "="}")
+
+        print()
 
         # Display the word in whatever incompleted or completed state it's in, with spaces between every element of the list.
         print(' '.join(self.display))
@@ -69,7 +74,7 @@ class WordGuessingGame:
         print()
 
         # Display the player's score, which is named however the given ruleset names it.
-        print(f"{self.ruleset.display_label()}: {self.value}")
+        print(f"{self.ruleset.display_name()}: {self.value}")
         # Display the number of hints that the player still has remaining.
         print(f"Hints: {self.hints_remaining}")
 
@@ -77,6 +82,7 @@ class WordGuessingGame:
 
         # Display the list of the player's already-guessed letters.
         print("Guesses:", ' '.join(self.guesses))
+    # End of display_game_state()
 
 
 
@@ -99,6 +105,7 @@ class WordGuessingGame:
                 continue
 
             return guess
+    # End of get_valid_guess()
 
 
 
@@ -115,6 +122,7 @@ class WordGuessingGame:
                 occurrences += 1
 
         return occurrences
+    # End of apply_guess()
 
 
 
@@ -129,7 +137,8 @@ class WordGuessingGame:
             print(f"Sorry, there are no occurrences of the letter \"{guess}\".")
 
         # Display the new score resulting from the user's guess, whether correct (increased score) or incorrect (decreased score).
-        print(f"Updated {self.ruleset.display_label()}: {self.value}")
+        print(f"Updated {self.ruleset.display_name()}: {self.value}")
+    # End of print_guess_result()
 
 
 
@@ -145,6 +154,7 @@ class WordGuessingGame:
             return 2
         # 3 hints for words any longer than that; consider this the default number of hints.
         return 3
+    # End of calculate_hints()
 
 
 
@@ -160,6 +170,7 @@ class WordGuessingGame:
 
         # Randomly pick a letter from the set.
         return random.choice(list(available_letters))
+    # End of get_hint_letter()
 
 
 
@@ -185,6 +196,7 @@ class WordGuessingGame:
             # Should read as "hints" if number of hints remaining is 0 or greater than 1.
             plural = "s"
         print(f"You now have {self.hints_remaining} hint{plural} remaining.")
+    # End of use_hint()
 
 
 
@@ -204,6 +216,7 @@ class WordGuessingGame:
             print(f"***COMPLETION PERCENT (ALL): {completion_percent}***")
         
         return completion_percent
+    # End of completion_percent_all()
 
 
 
@@ -214,12 +227,13 @@ class WordGuessingGame:
         # and is not artificially inflated if those letters occurred more than once.
         unique_letters_in_word = len(set(self.word))
         revealed_letters = len(set(self.display) - {'_'})
-
         completion_percent = (revealed_letters / unique_letters_in_word) * 100
+        
         if config.GAME_DEBUGGER or config.DEBUG_ALL:
             print(f"***COMPLETION PERCENT (UNIQUE): {completion_percent}***")
         
         return completion_percent
+    # End of completion_percent_unique()
 
 
 
@@ -232,10 +246,11 @@ class WordGuessingGame:
         if self.ruleset.has_lost(self.value):
             return "LOSS"
         return None
+    # End of get_result()
 
 
 
-    def play_game(self) -> config.GameResults:
+    def play_game(self) -> GameResults:
         # 1st: Set up the game.
         # Randomly select a word from the wordlist supplied to the object.
         self.choose_word()
@@ -300,7 +315,7 @@ class WordGuessingGame:
 
         # Fill out the return dict with the statistics of the game (intended to be compatible with record_game() in the Statistics class).
         game_results = {
-            "mode": self.ruleset.display_label(),
+            "mode": self.ruleset.display_name(),
             "word": self.word,
             "result": result,
             "score": self.value,
@@ -308,3 +323,5 @@ class WordGuessingGame:
             "completion": self.completion_percent_all()}
         
         return game_results
+    # End of play_game()
+# End of WordGuessingGame() class

@@ -13,13 +13,14 @@ class Ruleset(ABC):
     # Print base rules that apply to all subclasses, ie. how to quit, how to use hints.
     def print_rules(self) -> None:
         print()
+
         print("=" * config.BORDER_LEN)
         print("WORD GUESSING GAME")
         print("=" * config.BORDER_LEN)
         print("Let's play a word guessing game!")
         print(f"Enter {config.QUIT_CHAR} at any time to quit.")
         print(f"Enter {config.HINT_CHAR} to use a hint.")
-        #print("=" * 24)
+
         # Then print the rules specific to a subclass.
         self.print_mode_rules()
 
@@ -30,7 +31,7 @@ class Ruleset(ABC):
 
     # Method defined by Ruleset subclasses for the displayed mode name.
     @abstractmethod
-    def display_label(self) -> str:
+    def display_name(self) -> str:
         pass
 
     # Method defined by Ruleset subclasses for the mode-specific starting score.
@@ -47,6 +48,7 @@ class Ruleset(ABC):
     @abstractmethod
     def has_lost(self, current_value: int) -> bool:
         pass
+# End of Ruleset() abstract base class
 
 
 
@@ -75,7 +77,7 @@ class PointsRuleset(Ruleset):
         print("Incorrect guesses subtract 1 point from your score.")
         print("You win if you correctly guess all the letters. You lose if your score goes below 0.")
 
-    def display_label(self) -> str:
+    def display_name(self) -> str:
         return "Points"
 
     def initial_value(self) -> int:
@@ -93,6 +95,7 @@ class PointsRuleset(Ruleset):
     def has_lost(self, score: int) -> bool:
         # The lose condition is once the score goes BELOW 0 (ie. reaches -1).
         return score < 0
+# End of PointsRuleset() subclass
 
 
 
@@ -123,7 +126,7 @@ class LivesRuleset(Ruleset):
         print("Correct guesses do not restore lives.")
         print("You win if you correctly guess all the letters. You lose if you reach 0 lives.")
 
-    def display_label(self) -> str:
+    def display_name(self) -> str:
         return "Lives"
 
     def initial_value(self) -> int:
@@ -141,6 +144,7 @@ class LivesRuleset(Ruleset):
     def has_lost(self, lives: int) -> bool:
         # The lose condition is if the number of lives goes down to 0.
         return lives <= 0
+# End of LivesRuleset() subclass
 
 
 
@@ -168,7 +172,7 @@ class CountdownRuleset(Ruleset):
         print(f"Every guess costs {self.GUESS_COST} points. Points cannot be gained back.")
         print("You win if you correctly guess all the letters. You lose if your score reaches 0.")
 
-    def display_label(self) -> str:
+    def display_name(self) -> str:
         return "Countdown"
 
     def initial_value(self) -> int:
@@ -182,6 +186,7 @@ class CountdownRuleset(Ruleset):
     def has_lost(self, score: int) -> bool:
         # The lose condition is if the score goes down to 0.
         return score <= 0
+# End of CountdownRuleset() subclass
 
 
 
@@ -208,7 +213,7 @@ class StreakRuleset(Ruleset):
         print("Incorrect guesses reset your streak to 0.")
         print(f"There is no loss condition. Enter {config.QUIT_CHAR} at any time to quit.")
 
-    def display_label(self) -> str:
+    def display_name(self) -> str:
         return "Streak"
 
     def initial_value(self) -> int:
@@ -226,13 +231,12 @@ class StreakRuleset(Ruleset):
     def has_lost(self, current_value: int) -> bool:
         # There is no lose condition in this mode; the player can only end the game by quitting.
         return False
+# End of StreakRuleset() subclass
 
 
 
-# Dict of rulesets.
+# Add new rulesets to this dict after defining their classes (and don't forget to add a comma!).
 RULESETS = {"1": ("Points Mode", PointsRuleset),
             "2": ("Lives Mode", LivesRuleset),
             "3": ("Countdown Mode", CountdownRuleset),
-            "4": ("Streak Mode", StreakRuleset)
-            # Add new rulesets here after defining their classes (and don't forget the preceding comma!)
-            }
+            "4": ("Streak Mode", StreakRuleset)}

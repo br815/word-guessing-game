@@ -58,13 +58,14 @@ def is_valid_url(url: str, domain: str) -> bool:
         ".doc",
         ".docx",
         ".xls",
-        ".xlsx",
-    )
+        ".xlsx",)
 
     if parsed.path.lower().endswith(excluded_extensions):
         return False
     
     return True
+# End of is_valid_url()
+
 
 
 def get_page_content(soup: BeautifulSoup) -> Tag | None:
@@ -83,6 +84,8 @@ def get_page_content(soup: BeautifulSoup) -> Tag | None:
         content = soup.find("body")
 
     return content
+# End of get_page_content()
+
 
 
 def get_candidate_urls(content: Tag, current_url: str, domain: str) -> list[str]:
@@ -100,30 +103,16 @@ def get_candidate_urls(content: Tag, current_url: str, domain: str) -> list[str]
     # Look only inside paragraphs rather than every
     # link contained anywhere in the main page area.
     for paragraph in content.find_all("p"):
-
-        for link in paragraph.find_all(
-            "a",
-            href=True
-        ):
-
+        for link in paragraph.find_all("a", href=True):
             href = link.get("href")
 
             if not isinstance(href, str):
                 continue
 
-            full_url = urljoin(
-                current_url,
-                href
-            )
+            full_url = urljoin(current_url, href)
+            full_url = normalize_url(full_url)
 
-            full_url = normalize_url(
-                full_url
-            )
-
-            if not is_valid_url(
-                full_url,
-                domain
-            ):
+            if not is_valid_url(full_url, domain):
                 continue
 
             if full_url == current_url:
@@ -132,15 +121,12 @@ def get_candidate_urls(content: Tag, current_url: str, domain: str) -> list[str]
             if full_url in seen_urls:
                 continue
 
-            candidates.append(
-                full_url
-            )
-
-            seen_urls.add(
-                full_url
-            )
+            candidates.append(full_url)
+            seen_urls.add(full_url)
 
     return candidates
+# End of get_candidate_urls()
+
 
 
 def crawl(seed_url: str, num_webpages: int) -> list[str]:
@@ -168,13 +154,9 @@ def crawl(seed_url: str, num_webpages: int) -> list[str]:
     """
 
     # Normalize the starting URL.
-    seed_url = normalize_url(
-        seed_url
-    )
+    seed_url = normalize_url(seed_url)
 
-    parsed_seed = urlparse(
-        seed_url
-    )
+    parsed_seed = urlparse(seed_url)
 
     domain = parsed_seed.netloc
 
@@ -186,78 +168,46 @@ def crawl(seed_url: str, num_webpages: int) -> list[str]:
     # URLs already placed in the queue.
     queued = {seed_url}
 
-    collected = []
+    collected_urls = []
 
-    while (
-        to_visit
-        and len(collected) < num_webpages
-    ):
-
-        # FIFO queue:
-        # the first discovered URL is crawled first.
+    while (to_visit and len(collected_urls) < num_webpages):
+        # FIFO queue: the first discovered URL is crawled first.
         url = to_visit.pop(0)
 
         if url in visited:
             continue
 
         try:
-            response = requests.get(
-                url,
-                timeout=10,
-                headers=config.REQUEST_HEADERS
-            )
-
+            response = requests.get(url, timeout=10, headers=config.REQUEST_HEADERS)
             response.raise_for_status()
-
         except requests.RequestException as err_msg:
-
             if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-                print(
-                    f"ERROR: Could not crawl "
-                    f"{url}: {err_msg}"
-                )
+                print(f"ERROR: Could not crawl {url}: {err_msg}")
 
             visited.add(url)
             continue
 
         visited.add(url)
-        collected.append(url)
+        collected_urls.append(url)
 
         if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-            print(
-                f"Crawled: {url}"
-            )
+            print(f"Crawled: {url}")
 
         # Parse the downloaded HTML.
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
+        soup = BeautifulSoup(response.text, "html.parser")
 
         # Locate the main content.
-        content = get_page_content(
-            soup
-        )
+        content = get_page_content(soup)
 
         if content is None:
             if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-                print(
-                    f"WARNING: No main content found: "
-                    f"{url}"
-                )
-
+                print(f"WARNING: No main content found: {url}")
             continue
 
-        # Find links in the order they occur in
-        # the page's main content.
-        candidates = get_candidate_urls(
-            content,
-            url,
-            domain
-        )
+        # Find links in the order they occur in the page's main content.
+        candidates = get_candidate_urls(content, url, domain)
 
-        # Add candidates to the crawl queue in
-        # document order.
+        # Add candidates to the crawl queue in document order.
         for candidate_url in candidates:
 
             if candidate_url in visited:
@@ -266,27 +216,15 @@ def crawl(seed_url: str, num_webpages: int) -> list[str]:
             if candidate_url in queued:
                 continue
 
-            # Stop adding URLs once we have enough
-            # pages waiting/collected to satisfy the
-            # requested maximum.
-            if (
-                len(collected) + len(to_visit)
-                >= num_webpages
-            ):
+            # Stop adding URLs once we have enough pages waiting/collected to satisfy the requested maximum.
+            if (len(collected_urls) + len(to_visit) >= num_webpages):
                 break
 
-            to_visit.append(
-                candidate_url
-            )
-
-            queued.add(
-                candidate_url
-            )
+            to_visit.append(candidate_url)
+            queued.add(candidate_url)
 
     if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-        print(
-            f"URLs collected: "
-            f"{len(collected)}"
-        )
+        print(f"URLs collected: {len(collected_urls)}")
 
-    return collected
+    return collected_urls
+# End of crawl()

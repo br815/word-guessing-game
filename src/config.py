@@ -2,8 +2,6 @@
 import pathlib
 # For POS_DICT.
 from nltk.corpus import wordnet
-# For GameResults.
-from typing import TypedDict
 
 
 
@@ -72,17 +70,6 @@ POS_DICT = {
     "RBR": wordnet.ADV,
     "RBS": wordnet.ADV
 }
-
-
-
-# TypedDict type hint for the return type of play_game() in word_guessing_game.py that is also the parameter of record_game() in statistics.py.
-class GameResults(TypedDict):
-    mode: str
-    word: str
-    result: str
-    score: int
-    guesses: int
-    completion: float
 
 
 

@@ -1,8 +1,8 @@
+import config
 import re
 import requests
 from bs4 import BeautifulSoup
 
-import config
 
 
 def scrape_page(url: str) -> str:
@@ -16,11 +16,7 @@ def scrape_page(url: str) -> str:
         Cleaned textual content.
     """
 
-    response = requests.get(
-        url,
-        timeout=10,
-        headers=config.REQUEST_HEADERS
-    )
+    response = requests.get(url, timeout=10, headers=config.REQUEST_HEADERS)
     response.raise_for_status()
 
     if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:

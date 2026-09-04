@@ -101,7 +101,7 @@ def run_game(this_session: Statistics) -> None:
     # Load ruleset.
     ruleset = load_ruleset()
     if config.MAIN_TEST_LIST_DEBUGGER or config.MAIN_WORD_LIST_DEBUGGER or config.DEBUG_ALL:
-        print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_label()}***")
+        print(f"***CHOSEN RULESET FROM MAIN(): {ruleset.display_name()}***")
 
     # Instantiate a WordGuessingGame object on the given word list and ruleset.
     this_game = WordGuessingGame(word_list, ruleset)
