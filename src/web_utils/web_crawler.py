@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 
-    
+
 def normalize_url(url: str) -> str:
     """
     Normalize a URL for crawl comparison.

@@ -1,14 +1,13 @@
-# This project is for a word guessing game.
+# This project is for a word guessing game (for CS 4395, dated 2/18/23).
 
-import sys
 import pathlib
-from nltk import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag
 import re
+import sys
 from random import randint
 
+from nltk import pos_tag, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 
 
 # This function takes a list of raw text as input
@@ -56,6 +55,7 @@ def process_text(raw_text):
     return desired_tokens, noun_lemmas
 
 # End of process_text()
+
 
 
 # This function takes a list of strings as input.
@@ -135,6 +135,7 @@ def guessing_game(wordlist):
 # End of guessing_game()
 
 
+
 # main()
 if __name__ == "__main__":
     # User must specify filename as sysarg[1], otherwise quit
@@ -187,5 +188,4 @@ if __name__ == "__main__":
 
     # Guessing game on the list of most common nouns
     guessing_game(common_nouns)
-
 # End of main()

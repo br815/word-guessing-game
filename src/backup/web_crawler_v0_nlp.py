@@ -1,17 +1,16 @@
-import pathlib
-import requests
+# Discovering and recursively following links is web crawling,
+# while parsing HTML to extract specific data is web scraping.
 
+import pathlib
 from urllib.parse import urljoin
+
+import requests
 from bs4 import BeautifulSoup
 
-
-
-# GLOBALS (move to config.py?)
+# GLOBALS
 TEXTS_DIR = pathlib.Path("texts")
 MAX_LINKS_PER_PAGE = 10
 
-# Discovering and recursively following links is web crawling,
-# while parsing HTML to extract specific data is web scraping.
 
 def fetch_page(url):
     """
@@ -157,3 +156,4 @@ if __name__ == "__main__":
         depth=MAX_DEPTH,
         visited=visited_pages
     )
+# End of main()

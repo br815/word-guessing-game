@@ -1,5 +1,8 @@
+# This version of the game is just an extracted copy of the original word_guessing_game() function in v0_nlp.
+
 import re
 from random import randint
+
 
 # This function takes a list of strings as input.
 def word_guessing_game(wordlist):
