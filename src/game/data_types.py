@@ -1,4 +1,4 @@
-# Type hints modeling the structured data types created for the game loop & game summary.
+# For type hints modeling the structured data types created for the game loop & game summary.
 from typing import TypedDict
 
 

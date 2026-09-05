@@ -1,4 +1,5 @@
 import config
+
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -24,10 +25,7 @@ def scrape_page(url: str) -> str:
         print(f"Status: {response.status_code}")
         print(f"HTML length: {len(response.text)}")
 
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
-    )
+    soup = BeautifulSoup(response.text, "html.parser")
 
     # Remove elements that are not useful article content.
     for tag in soup([
@@ -38,19 +36,15 @@ def scrape_page(url: str) -> str:
         "footer",
         "header",
         "aside",
-        "form"
-    ]):
+        "form"]):
         tag.decompose()
 
     # Find the main article.
     content = soup.find("article")
-
     if content is None:
         content = soup.find("main")
-
     if content is None:
         content = soup.body
-
     if content is None:
         return ""
 
@@ -60,20 +54,14 @@ def scrape_page(url: str) -> str:
         print(f"Content classes: {content.get('class')}")
 
     # Remove interactive elements.
-    for tag in content.find_all(
-        ["button", "input", "select", "textarea"]
-    ):
+    for tag in content.find_all(["button", "input", "select", "textarea"]):
         tag.decompose()
 
     # Extract paragraphs only.
     text_parts = []
 
     for paragraph in content.find_all("p"):
-        text = paragraph.get_text(
-            separator=" ",
-            strip=True
-        )
-
+        text = paragraph.get_text(separator=" ", strip=True)
         if text:
             text_parts.append(text)
 
@@ -84,20 +72,13 @@ def scrape_page(url: str) -> str:
     text = text.replace("|", " ")
 
     # Normalize whitespace.
-    text = re.sub(
-        r"[ \t]+",
-        " ",
-        text
-    )
+    text = re.sub(r"[ \t]+", " ", text)
 
     # Remove excessive blank lines.
-    text = re.sub(
-        r"\n\s*\n+",
-        "\n\n",
-        text
-    ).strip()
+    text = re.sub(r"\n\s*\n+", "\n\n", text).strip()
 
     if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
         print(f"Extracted text length: {len(text)}")
 
     return text
+# End of scrape_page()

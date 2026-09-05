@@ -21,7 +21,7 @@ PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
 GAME_DEBUGGER = True
 # Two booleans specifically for main.py to print its debug statements if desired:
-MAIN_TEST_LIST_DEBUGGER = True
+MAIN_TEST_LIST_DEBUGGER = False
 # the one above for the hard-coded test list, and one below for the user-selected word list.
 MAIN_WORD_LIST_DEBUGGER = False
 

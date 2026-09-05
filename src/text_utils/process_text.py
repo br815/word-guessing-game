@@ -1,11 +1,11 @@
 import config
-import unicodedata
+
 import collections
-from nltk.corpus import stopwords
-from nltk.tokenize import RegexpTokenizer
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet
+import unicodedata
 from nltk import pos_tag
+from nltk.corpus import stopwords, wordnet
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import RegexpTokenizer
 
 # GLOBALS:
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.

@@ -1,8 +1,9 @@
 import config
+from game.data_types import GameResults
+from game.rulesets import Ruleset
+
 import random
 import re
-from game.rulesets import Ruleset
-from game.data_types import GameResults
 
 
 

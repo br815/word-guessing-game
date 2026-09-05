@@ -1,5 +1,5 @@
 import config
-from game.rulesets import Ruleset, RULESETS
+from game.rulesets import RULESETS, Ruleset
 from game.statistics import Statistics
 from game.word_guessing_game import WordGuessingGame
 from text_utils.process_file import process_file

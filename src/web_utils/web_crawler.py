@@ -1,10 +1,11 @@
 import config
+
+from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup, Tag
-from urllib.parse import urljoin, urlparse
 
 
-
+    
 def normalize_url(url: str) -> str:
     """
     Normalize a URL for crawl comparison.
@@ -58,7 +59,7 @@ def is_valid_url(url: str, domain: str) -> bool:
         ".doc",
         ".docx",
         ".xls",
-        ".xlsx",)
+        ".xlsx")
 
     if parsed.path.lower().endswith(excluded_extensions):
         return False
