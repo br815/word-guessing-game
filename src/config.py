@@ -9,32 +9,33 @@ from nltk.corpus import wordnet
 # Project-wide debugger to trigger all debug statements.
 DEBUG_ALL = False
 # Boolean specifically for web_crawler.py to print its debug statements if desired.
-WEB_CRAWLER_DEBUGGER = True
+WEB_CRAWLER_DEBUGGER = False
 # Boolean specifically for web_scraper.py to print its debug statements if desired.
-WEB_SCRAPER_DEBUGGER = True
+WEB_SCRAPER_DEBUGGER = False
 # Boolean specifically for generate_texts.py to print its debug statements if desired.
-GENERATE_TEXTS_DEBUGGER = True
+GENERATE_TEXTS_DEBUGGER = False
 # Boolean specifically for process_file.py to print its debug statements if desired.
 PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
 PROCESS_TEXT_DEBUGGER = False
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
-GAME_DEBUGGER = True
+GAME_DEBUGGER = False
 # Two booleans specifically for main.py to print its debug statements if desired:
 MAIN_TEST_LIST_DEBUGGER = False
-# the one above for the hard-coded test list, and one below for the user-selected word list.
+# the one above for the hard-coded test list, and the one below for the user-selected word list.
 MAIN_WORD_LIST_DEBUGGER = False
 
 
 
-### PATH TO REPO'S SUB-DIRECTORY CONTAINING TXT INPUT FILES
+### MISCELLANEOUS SETTINGS
+# Path to repo's sub-directory containing txt input files.
 TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
-### TEST LIST TO TEST WORD GUESSING GAME ON
+# Hard-coded test list to test the word guessing game on.
 TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]
-### SPECIAL CHARS FOR GAME MENU SETTINGS
-QUIT_CHAR = '!'
-HINT_CHAR = '?'
-### WIDTH OF PRINTED BORDER BETWEEN PRINTED ITEMS IN GAME LOOP AND GAME SUMMARY
+# Special chars for game menu settings.
+QUIT_CHAR = "!"
+HINT_CHAR = "?"
+# Width of printed border between printed items in game loop and game summary.
 BORDER_LEN = 50
 
 

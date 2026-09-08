@@ -1,4 +1,5 @@
 import config
+
 from abc import ABC, abstractmethod
 
 # GLOBALS:
@@ -161,14 +162,14 @@ class CountdownRuleset(Ruleset):
         score <= 0
     """
 
-    STARTING_SCORE = 100
+    STARTING_COUNT = 100
     GUESS_COST = 5
 
     def print_mode_rules(self) -> None:
         print("=" * config.BORDER_LEN)
         print("INSTRUCTIONS FOR COUNTDOWN MODE")
         print("=" * config.BORDER_LEN)
-        print(f"Start with {self.STARTING_SCORE} points.")
+        print(f"Start with {self.STARTING_COUNT} points.")
         print(f"Every guess costs {self.GUESS_COST} points. Points cannot be gained back.")
         print("You win if you correctly guess all the letters. You lose if your score reaches 0.")
 
@@ -177,7 +178,7 @@ class CountdownRuleset(Ruleset):
 
     def initial_value(self) -> int:
         # Score starts at maximum points.
-        return self.STARTING_SCORE
+        return self.STARTING_COUNT
 
     def update(self, score: int, guess_is_correct: bool, occurrences: int) -> int:
         # Score decrements regardless of if a guess is correct or incorrect.
@@ -235,7 +236,7 @@ class StreakRuleset(Ruleset):
 
 
 
-# Add new rulesets to this dict after defining their classes (and don't forget to add a comma!).
+# Add new rulesets to this dict after defining their classes (and don't forget the preceding comma!).
 RULESETS = {"1": ("Points Mode", PointsRuleset),
             "2": ("Lives Mode", LivesRuleset),
             "3": ("Countdown Mode", CountdownRuleset),

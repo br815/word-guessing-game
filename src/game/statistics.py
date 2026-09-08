@@ -105,7 +105,7 @@ class Statistics:
         if not words_won_or_lost:
             return
 
-        # Set prefix to be the row name + the column width used for all other columns in the report.
+        # Set prefix to be the row name + the column width (should be the same width as all other columns in the report).
         prefix = f"{row_name:<{col_width}}"
         current_line = prefix
 
@@ -115,14 +115,19 @@ class Statistics:
                 word += ","
 
             if current_line == prefix:
+                # Print the first word in the word list as: no preceding space, word, comma if not final word.
                 proposed_line = current_line + word
             else:
+                # Print all other words in the word list as: preceding space, word, comma if not final word.
                 proposed_line = current_line + " " + word
 
             if len(proposed_line) > config.BORDER_LEN:
+                # If the proposed line overflows past the row, don't actually print it, just print whatever the current line already is.
                 print(current_line)
+                # Set up the next line for printing: indented to where the first word was printed (ie. past the row name + column width).
                 current_line = " " * len(prefix) + word
             else:
+                # If the proposed line does not overflow past the row, then it can be set as the current line.
                 current_line = proposed_line
 
         print(current_line)

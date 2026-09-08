@@ -1,4 +1,5 @@
 import config
+
 import pathlib
 
 
@@ -36,8 +37,8 @@ def select_file_from_dir(dir_name: str) -> pathlib.Path:
     while True:
         # Display files with numbers & parantheses: 1), 2), ... etc.
         print("\nAVAILABLE INPUT FILES:")
-        for number, file in enumerate(files, start=1):
-            print(f"{number}) {file.name}")
+        for num, file in enumerate(files, start=1):
+            print(f"{num}) {file.name}")
         
         user_input = input("Choose a file number: ").strip()
 

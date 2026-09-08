@@ -202,7 +202,7 @@ class WordGuessingGame:
 
 
     def completion_percent_all(self) -> float:
-        # List comprehension to calculate percentage of ALL letters revealed, which even includes multiple occurrences.
+        # Generator expression to calculate percentage of ALL letters revealed, which even includes multiple occurrences.
         # Is a more player-intuitive statistic because it accounts for every individual character the player sees on their display,
         # ie. multiple occurrences of correct letters that occur multiple times
         # and blanks for letters they didn't get, even if those letters occur multiple times.
@@ -212,10 +212,7 @@ class WordGuessingGame:
             in self.display
             if char != '_')
 
-        completion_percent = (revealed_letters / len(self.word)) * 100
-        if config.GAME_DEBUGGER or config.DEBUG_ALL:
-            print(f"***COMPLETION PERCENT (ALL): {completion_percent}***")
-        
+        completion_percent = (revealed_letters / len(self.word)) * 100        
         return completion_percent
     # End of completion_percent_all()
 
@@ -228,11 +225,8 @@ class WordGuessingGame:
         # and is not artificially inflated if those letters occurred more than once.
         unique_letters_in_word = len(set(self.word))
         revealed_letters = len(set(self.display) - {'_'})
+
         completion_percent = (revealed_letters / unique_letters_in_word) * 100
-        
-        if config.GAME_DEBUGGER or config.DEBUG_ALL:
-            print(f"***COMPLETION PERCENT (UNIQUE): {completion_percent}***")
-        
         return completion_percent
     # End of completion_percent_unique()
 
@@ -309,10 +303,8 @@ class WordGuessingGame:
                 break
 
         if config.GAME_DEBUGGER or config.DEBUG_ALL:
-            print("***DISPLAYING BOTH COMPLETION PERCENTS:***")
-            self.completion_percent_all()
-            self.completion_percent_unique()
-            print()
+            print(f"***COMPLETION PERCENT (ALL): {self.completion_percent_all()}%***")
+            print(f"***COMPLETION PERCENT (UNIQUE): {self.completion_percent_unique()}%***")
 
         # Fill out the return dict with the statistics of the game (intended to be compatible with record_game() in the Statistics class).
         game_results = {
