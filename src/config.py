@@ -17,7 +17,7 @@ GENERATE_TEXTS_DEBUGGER = False
 # Boolean specifically for process_file.py to print its debug statements if desired.
 PROCESS_FILE_DEBUGGER = False
 # Boolean specifically for process_text.py to print its debug statements if desired.
-PROCESS_TEXT_DEBUGGER = False
+PROCESS_TEXT_DEBUGGER = True
 # Boolean specifically for word_guess_game.py to print its debug statements if desired.
 GAME_DEBUGGER = False
 # Two booleans specifically for main.py to print its debug statements if desired:
@@ -28,7 +28,7 @@ MAIN_WORD_LIST_DEBUGGER = False
 
 
 ### MISCELLANEOUS SETTINGS
-# Path to repo's sub-directory containing txt input files.
+# Path to repo's sub-directory containing text files.
 TEXTS = pathlib.Path(__file__).resolve().parent.parent / "texts"
 # Hard-coded test list to test the word guessing game on.
 TEST_LIST = ["pain", "piano", "stuffy", "germane", "asteroid", "inflorescence"]

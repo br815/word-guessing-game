@@ -1,6 +1,6 @@
 import config
 from web_utils.web_crawler import crawl
-from web_utils.web_scraper import scrape_page
+from web_utils.web_scraper import scrape
 
 import os
 import re
@@ -10,7 +10,7 @@ import requests
 
 
 
-def get_filename_from_url(url: str) -> str:
+def get_file_name_from_url(url: str) -> str:
     """
     Create a filename from a webpage URL.
 
@@ -18,6 +18,7 @@ def get_filename_from_url(url: str) -> str:
     URL path rather than the webpage's HTML title.
     """
 
+    # 1st: Get the domain name.
     parsed = urlparse(url)
 
     # Remove "www." from the domain.
@@ -32,7 +33,7 @@ def get_filename_from_url(url: str) -> str:
     # Keep only the main domain name.
     domain = domain.split(".")[0]
 
-    # Get the URL path.
+    # 2nd: Get the URL path.
     path = parsed.path.strip("/")
 
     # Remove common file extensions.
@@ -44,29 +45,29 @@ def get_filename_from_url(url: str) -> str:
     # Replace "/" with "_".
     path = path.replace("/", "_")
 
-    # Combine domain and path.
-    filename = f"{domain}_{path}"
-    filename = filename.lower()
+    # 3rd: Combine domain and path.
+    file_name = f"{domain}_{path}"
+    file_name = file_name.lower()
 
     # Avoid repeated consecutive underscores.
-    filename = re.sub(r"_+", "_", filename)
+    file_name = re.sub(r"_+", "_", file_name)
 
-    # Remove characters that are invalid in Windows filenames.
-    filename = re.sub(r"[<>:/|?*\"\\]", "", filename)
+    # Remove characters that are invalid in Windows file_names.
+    file_name = re.sub(r"[<>:/|?*\"\\]", "", file_name)
 
-    return filename.strip("_.")
-# End of get_filename_from_url()
+    return file_name.strip("_.")
+# End of get_file_name_from_url()
 
 
 
-def generate_text_file(seed_url: str, num_webpages: int, output_dir=config.TEXTS) -> str:
+def generate_file(seed_url: str, num_webpages: int, dir_name: str) -> str:
     """
     Crawl and scrape webpages and save their text to an input file.
 
     Args:
         seed_url: Starting webpage supplied by the user.
         max_webpages: Maximum number of webpages to collect.
-        output_dir: Directory in which to create the input file.
+        dir_name: Directory in which to create the input file.
 
     Returns:
         Path to the newly created text file.
@@ -81,27 +82,24 @@ def generate_text_file(seed_url: str, num_webpages: int, output_dir=config.TEXTS
         raise ValueError("ERROR: The crawler could not access any webpages.")
    
     all_scraped_text = []
-    print(f"URLs collected: {len(urls)}")
     for num, url in enumerate(urls, start=1):
-        # Display URLs with numbers & parantheses: 1), 2), ... etc.
-        print(f"{num}) {url}")
-        # Try-except block is necessary in case downloading the webpage encounters any unexpected interruptions (see scrape_page() in web_scraper.py).
+        # Try-except block is necessary in case downloading the webpage encounters any unexpected interruptions (see scrape() in web_scraper.py).
         try:
-            current_scraped_text = scrape_page(url)
+            current_scraped_text = scrape(url)
             # If scraping was successful on the current URL, format the scraped text for output to the text file.
             if current_scraped_text:
                 if num != 1:
                     # Places a total of 3 blank lines before each scraped text, except for the 1st one.
                     all_scraped_text.append("\n\n")
                 if config.GENERATE_TEXTS_DEBUGGER or config.DEBUG_ALL:
-                    # Add a link header for debugging purposes only.
+                    # Add a header citing the source link for debugging purposes only.
                     all_scraped_text.append("=" * config.BORDER_LEN)
                     all_scraped_text.append(f"SOURCE: {url}")
                     all_scraped_text.append("=" * config.BORDER_LEN)
-                # Then add the current URL text to what will eventually be written to the text file.
+                # Then add the current URL's scraped text to what will eventually be written to the text file.
                 all_scraped_text.append(f"{current_scraped_text}")
-        # Failure handled here instead of in scrape_page() because it is more logical to handle the failure at the level where scrape_page() is actually being called.
-        # (Unlike in crawl(), where the same failure was more logical to handle directly in crawl().)
+        # Exception handled here instead of in scrape() because it is more logical to handle the exception at the level where scrape() is actually being called.
+        # (Unlike in crawl(), where the same exception was more logical to handle directly in crawl().)
         except requests.RequestException as err_msg:
             print(f"ERROR: Could not scrape {url}: {err_msg}")
 
@@ -110,16 +108,18 @@ def generate_text_file(seed_url: str, num_webpages: int, output_dir=config.TEXTS
 
     # Get timestamp & combine it with the seed URL to make the text file name.
     timestamp = datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
-    filename = (f"{get_filename_from_url(seed_url)}_{timestamp}.txt")
+    file_name = (f"{get_file_name_from_url(seed_url)}_{timestamp}.txt")
 
     # Make path to text file.
-    os.makedirs(output_dir, exist_ok=True)
-    path = os.path.join(output_dir, filename)
+    os.makedirs(dir_name, exist_ok=True)
+    file_path = os.path.join(dir_name, file_name)
 
-    # Write final scraped texts to text file.
     final_text = "\n".join(all_scraped_text)
-    with open(path, "w", encoding="utf-8") as file:
+    with open(file_path, "w", encoding="utf-8") as file:
+        # Write final joined scraped texts to text file.
         file.write(final_text)
+        # Add a newline to the end of the text file.
+        file.write("\n")
 
-    return path
-# End of generate_text_file()
+    return file_path
+# End of generate_file()

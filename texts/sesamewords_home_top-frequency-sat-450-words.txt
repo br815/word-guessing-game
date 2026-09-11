@@ -1,9 +1,6 @@
-
-
 ==================================================
-SOURCE: https://sites.google.com/site/sesamewords/home/top-frequency-sat-450-words-lessons-1-1-1-15?authuser=0
+SOURCE: https://sites.google.com/site/sesamewords/home/top-frequency-sat-450-words-lessons-1-1-1-15?authuser=0&pli=1
 ==================================================
-
 Lesson 1.1
 allege...syn: claim or accuse; report or maintain
 ally...syn: partner; a friendly nation
@@ -93,7 +90,7 @@ conditional...syn: dependent; qualified by reservations
 diminish...syn: decrease; decrease in size, extent, or range
 diplomatic...syn: avoiding insult; relating to or characteristic of diplomacy
 fabrication...syn: creation; a deliberately false or improbable account
-incidental...syn: not essential; (sometimes followed by `to’) minor or casual or subordinate in significance
+incidental...syn: not essential; (sometimes followed by to’) minor or casual or subordinate in significance
 predictable...syn: expected; capable of being foretold
 repeal...syn: cancel or undo; cancel officially
 stark...syn: bare; devoid of any qualifications or disguise or adornment

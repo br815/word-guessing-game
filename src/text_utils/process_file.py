@@ -95,7 +95,7 @@ def process_file(dir_name: str) -> tuple[str, str | None]:
     """
     Function 3:         process_file()
 	Descr:              This function calls the helper functions to 
-                        print list of filenames in a given directory,
+                        print list of file names in a given directory,
                         prompt user to select a file, open file and read in its contents,
                         and return the contents.
 	Param:              dir_name

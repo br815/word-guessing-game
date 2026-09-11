@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 
 
-def scrape_page(url: str) -> str:
+def scrape(url: str) -> str:
     """
     Extract the main textual content from a webpage.
 
@@ -22,7 +22,7 @@ def scrape_page(url: str) -> str:
     response.raise_for_status()
 
     if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
-        print(f"- Scraping: {url}")
+        print(f"***URL INFO FROM SCRAPE(): {url}***")
         print(f"- Status: {response.status_code}")
         print(f"- HTML length: {len(response.text)}")
 
@@ -46,6 +46,7 @@ def scrape_page(url: str) -> str:
         return ""
 
     if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
+        print("***CONTENT INFO FROM SCRAPE()***")
         print(f"- Content tag: {content.name}")
         print(f"- Content ID: {content.get("id")}")
         print(f"- Content classes: {content.get("class")}")
@@ -74,7 +75,7 @@ def scrape_page(url: str) -> str:
     scraped_text = re.sub(r"\n\s*\n+", "\n\n", scraped_text).strip()
 
     if config.WEB_SCRAPER_DEBUGGER or config.DEBUG_ALL:
-        print(f"Extracted raw text length: {len(scraped_text)}\n")
+        print(f"***EXTRACTED RAW TEXT LENGTH FROM SCRAPE(): {len(scraped_text)}***\n")
 
     return scraped_text
-# End of scrape_page()
+# End of scrape()

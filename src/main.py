@@ -1,10 +1,10 @@
 import config
-from game.rulesets import RULESETS, Ruleset
-from game.statistics import Statistics
-from game.word_guessing_game import WordGuessingGame
+from web_utils.generate_file import generate_file
 from text_utils.process_file import process_file
 from text_utils.process_text import process_text
-from web_utils.generate_texts import generate_text_file
+from game.rulesets import RULESETS, Ruleset
+from game.word_guessing_game import WordGuessingGame
+from game.statistics import Statistics
 
 
 
@@ -126,11 +126,11 @@ def run_crawler() -> None:
             continue
 
         # If this point has been reached, input must be an int and can be cast as such.
-        webpage_count = int(user_input)
+        num_webpages = int(user_input)
 
         # Case 2: int is out of range.
-        if webpage_count < 1 or webpage_count > config.MAX_WEBPAGES:
-            print(f"ERROR: {webpage_count} is outside valid range.")
+        if num_webpages < 1 or num_webpages > config.MAX_WEBPAGES:
+            print(f"ERROR: {num_webpages} is outside valid range.")
             continue
 
         # Valid input received.
@@ -139,14 +139,14 @@ def run_crawler() -> None:
 
     print("\nCrawling website...\n")
 
-    # Try-except block is necessary in case no webpages could be collected (see generate_text_file() in generate_texts.py).
+    # Try-except block is necessary in case no webpages could be collected (see generate_file() in generate_file.py).
     try:
-        file_path = generate_text_file(seed_url, webpage_count)
+        file_path = generate_file(seed_url, num_webpages, config.TEXTS)
     except ValueError as err_msg:
         print(err_msg)
         return
 
-    print(f"\nNew text file created: {file_path}")
+    print(f"New text file created: {file_path}")
 # End of run_crawler()
 
 
@@ -157,7 +157,7 @@ def main() -> None:
 
     # Main menu loop.
     while True:
-        # ...
+        # Main menu options - append any new ones to this print stmt.
         print(f"\nMAIN MENU\n1) Generate Input File (web crawler)\n2) Play Word Guessing Game\n{config.QUIT_CHAR}) Quit")
         
         user_input = input(f"Choose an option from the main menu or enter {config.QUIT_CHAR} to quit: ").strip()

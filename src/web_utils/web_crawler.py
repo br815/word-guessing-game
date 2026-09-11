@@ -203,7 +203,7 @@ def crawl(seed_url: str, num_webpages: int) -> list[str]:
         collected_urls.append(url)
 
         if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-            print(f"Successfully crawled: {url}")
+            print(f"***CRAWL() SUCCESSFUL: {url}***")
 
         # Find links in the order they occur in the page's main content.
         candidate_urls = get_candidate_urls(content, url, domain)
@@ -222,8 +222,15 @@ def crawl(seed_url: str, num_webpages: int) -> list[str]:
             urls_to_visit.append(candidate_url)
             queued_urls.add(candidate_url)
 
-    if config.WEB_CRAWLER_DEBUGGER or config.DEBUG_ALL:
-        print(f"URLs collected: {len(collected_urls)}\n")
+    # Print results of crawling.
+    print(f"URLs requested: {num_webpages}")
+    print(f"URLs collected: {len(collected_urls)}")
+    # Display URLs with numbers & parantheses: 1), 2), ... etc.
+    for num, collected_url in enumerate(collected_urls, start=1):
+        print(f"{num}) {collected_url}")
+    # Inform the user if their requested number of URLs could not be met.
+    if len(collected_urls) < num_webpages:
+        print("NOTE: The crawler could not collect the requested number of URLs.\n")
 
     return collected_urls
 # End of crawl()
